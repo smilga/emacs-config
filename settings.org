@@ -139,7 +139,17 @@
 	(use-package js2-mode
 	    :ensure t
 	)
+	(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
+	(add-to-list 'load-path "/home/shmiga/github.com/tern/emacs/")
+	(autoload 'tern-mode "tern.el" nil t)
+
+	(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+
+	(eval-after-load 'tern
+	'(progn
+		(require 'tern-auto-complete)
+		(tern-ac-setup)))
     #+END_SRC
    
 ** Vuejs
