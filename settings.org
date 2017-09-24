@@ -1,43 +1,216 @@
+* Package management
+** Add packages from sources
+    #+BEGIN_SRC emacs-lisp
+	(require 'package)
+	(setq pacakge-enable-at-startup nil)
+	(add-to-list 'package-archives
+		    '("melpa" . "https://melpa.org/packages/"))
+
+	(package-initialize)
+    #+END_SRC
+** Package installation with "use package"
+    #+BEGIN_SRC emacs-lisp
+	(unless (package-installed-p 'use-package)
+	(package-refresh-contents)
+	(package-install 'use-package))
+    #+END_SRC
+** Package that allows to try another packages
+    #+BEGIN_SRC emacs-lisp
+	(use-package try
+	:ensure t)
+    #+END_SRC
+
+* Visual
+** Theme
+  #+BEGIN_SRC emacs-lisp
+	(use-package ujelly-theme
+	:ensure t)
+
+	(use-package atom-one-dark-theme
+	:ensure t)
+
+	(load-theme 'atom-one-dark t) ;load theme
+
+	(add-to-list 'load-path "~/.emacs.d/themes/")
+	(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+  #+END_SRC
+** UX
+  #+BEGIN_SRC emacs-lisp
+	(menu-bar-mode -1) ; disable menubar
+	(toggle-scroll-bar -1) ; disable scrollbar
+	(tool-bar-mode -1) ; disable toolbar 
+	(setq inhibit-startup-message t) ; start with scratch buffer
+	(setq-default tab-width 4)
+	(global-linum-mode t) ;show line numbers
+	(setq-default line-spacing 0.4)
+
+	;; use relative line numbers
+	(use-package linum-relative
+		:ensure t
+		:config
+			(linum-relative-global-mode t)
+			(setq linum-relative-current-symbol "")
+	)
+
+	;;Fonts
+	;(set-default-font "Monaco 13")
+   #+END_SRC
+
+* Behavior
+   #+BEGIN_SRC emacs-lisp
+    (setq make-backup-files nil) ; stop creating backup~ files
+    (setq auto-save-default nil) ; stop creating #autosave# files
+    (set-default 'truncate-lines t) ; stop wraping lines
+
+
+   #+END_SRC
+
+* TreeView
+   #+BEGIN_SRC emacs-lisp
+	(use-package neotree
+	:ensure t
+	:init
+	(add-hook 'neotree-mode-hook
+				(lambda ()
+				(define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+				(define-key evil-normal-state-local-map (kbd "SPC") 'neotree-quick-look)
+				(define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
+				(define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
+	)
+   #+END_SRC
+* Autopair
+	#+BEGIN_SRC emacs-lisp
+		(use-package autopair
+			:ensure t
+			:init
+			(autopair-global-mode t)
+		)
+	#+END_SRC
+* General keyindings
+	#+BEGIN_SRC emacs-lisp
+
+	(use-package general :ensure t
+		:config
+		(general-evil-setup t)
+
+		(general-define-key
+		:states '(normal emacs)
+		:prefix ","
+
+			"f" '(find-file :which-key "find file")
+			"w" '(save-buffer)
+			"'" '(neotree-toggle)
+			"p" '(project-find-file)
+
+			;;Splits
+			"sl" '(split-window-right)
+			"sj" '(split-window-below)
+			"sd" '(evil-window-delete)
+
+			;;Window navigation
+			"xl" '(evil-window-right)
+			"xj" '(evil-window-down)
+			"xk" '(evil-window-up)
+			"xh" '(evil-window-left)
+
+			;;Buffer management
+			"l" '(switch-to-buffer)
+			"k" '(kill-buffer)
+
+			;;Go mode
+			"gd" '(godef-jump)
+		)
+	)
+
+	#+END_SRC
+* Flycheck
+	#+BEGIN_SRC emacs-lisp
+		(use-package flycheck
+			:ensure t
+			:init
+			(global-flycheck-mode)
+			(setq flycheck-check-syntax-automatically '(mode-enabled save))
+		)
+	#+END_SRC
+  
+* Major modes
+** Javascript
+    #+BEGIN_SRC emacs-lisp
+	(use-package js2-mode
+	    :ensure t
+	)
+
+    #+END_SRC
+   
+** Vuejs
+    #+BEGIN_SRC emacs-lisp
+	(use-package vue-mode
+	    :ensure t
+	    :config
+	    ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
+	    (setq mmm-submode-decoration-level 0))
+    #+END_SRC
+** Golang
+    #+BEGIN_SRC emacs-lisp
+		(use-package go-mode
+			:ensure t
+			:init
+			(defun my-go-mode-hook ()
+			(add-hook 'before-save-hook 'gofmt-before-save) ; gofmt before every save
+			; Godef jump key binding                                                      
+			(local-set-key (kbd "M-.") 'godef-jump)
+			(local-set-key (kbd "M-*") 'pop-tag-mark)
+			)
+			(add-hook 'go-mode-hook 'my-go-mode-hook)
+		)
+
+		(use-package go-autocomplete
+		:ensure t)
+
+		(use-package auto-complete-config
+		:ensure t)
+
+		(ac-config-default)
+
+		(use-package exec-path-from-shell
+		:ensure t)
+
+		(defun my-go-mode-hook ()
+			; Call Gofmt before saving
+			(add-hook 'before-save-hook 'gofmt-before-save)
+			; Customize compile command to run go build
+			(if (not (string-match "go" compile-command))
+				(set (make-local-variable 'compile-command)
+					"go build -v && go test -v && go vet"))
+			; Godef jump key binding
+			(local-set-key (kbd "M-.") 'godef-jump)
+			(local-set-key (kbd "M-*") 'pop-tag-mark)
+			)
+
+	#+END_SRC
+** PHP
+	#+BEGIN_SRC emacs-lisp
+		(use-package php-mode
+		:ensure t)
+
+	#+END_SRC
+** Web
+	#+BEGIN_SRC emacs-lisp
+		(use-package web-mode
+		:ensure t)
+	#+END_SRC
+* Other
+  
 #+BEGIN_SRC emacs-lisp
-;;Don`t show startup message
-(setq inhibit-startup-message t)
+#+END_SRC
 
-
-;;Take off toolbar
-(tool-bar-mode -1)
-
-(setq make-backup-files nil) ; stop creating backup~ files
-(setq auto-save-default nil) ; stop creating #autosave# files
-(set-default 'truncate-lines t) ; stop wraping lines
-
-;; Add packages from melpa
-(require 'package)
-(setq pacakge-enable-at-startup nil)
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/"))
-
-(package-initialize)
-
-;;Simple installing packages with use-package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-;;Package that allows to try another packages (use <M-x>try)
-(use-package try
-  :ensure t)
-
+#+BEGIN_SRC emacs-lisp
 
 ;;Package that shows shows shortkeys after <C-x> is pressed
 (use-package which-key
   :ensure t
   :config (which-key-mode))
 
-;; Org-mode stuff
-(use-package org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 ;;Enables mode that shows buffers
 (setq indo-enable-flex-matching t)
@@ -135,26 +308,6 @@
  ;; If there is more than one, they won't work right.
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
-(use-package general :ensure t
-  :config
-  (general-evil-setup t)
-
-  (general-define-key
-   :states '(normal insert emacs)
-   :prefix "C-SPC"
-   :non-normal-prefix "C-SPC"
-   "l" '(avy-goto-line)
-   "a" 'align-regexp
-   )
-
-  (general-define-key
-   :states '(normal motion insert emacs)
-   :prefix "SPC"
-   "ar" '(ranger :which-key "call ranger")
-   "g"  '(:ignore t :which-key "Git")
-   "gs" '(magit-status :which-key "git status")
-   "f" '(find-file :which-key "find file")
-   "w" '(save-buffer)
-   )
-)
 #+END_SRC
+
+  
