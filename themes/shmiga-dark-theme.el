@@ -4,7 +4,7 @@
 (defvar shmiga-dark-colors-alist
   '(("shmiga-dark-accent"   . "#528BFF")
     ("shmiga-dark-fg"       . "#ABB2BF")
-    ("shmiga-dark-bg"       . "#131519")
+    ("shmiga-dark-bg"       . "#1C1C1C")
     ("shmiga-dark-bg-1"     . "#121417")
     ("shmiga-dark-bg-hl"    . "#2F343D")
     ("shmiga-dark-gutter"   . "#666D7A")

@@ -242,6 +242,14 @@
 			(set-face-foreground 'git-gutter:modified "yellow")
 		)
 	#+END_SRC
+** Multiple cursors
+#+BEGIN_SRC emacs-lisp
+(use-package evil-mc 
+:ensure t
+:init
+(global-evil-mc-mode 1)
+)
+#+END_SRC
 * Other
   
 #+BEGIN_SRC emacs-lisp
@@ -354,3 +362,5 @@
 #+END_SRC
 
   
+* TODO 
+ -set up silversearch with helm
