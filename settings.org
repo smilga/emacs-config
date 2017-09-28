@@ -29,12 +29,18 @@
 	(use-package atom-one-dark-theme
 	:ensure t)
 
-	(load-theme 'atom-one-dark t) ;load theme
-
 	(add-to-list 'load-path "~/.emacs.d/themes/")
 	(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+
+	(load-theme 'tomorrow-night t) ;load theme
+
+	;; Customizing tomorrow theme
+	;(custom-theme-set-faces
+	;'tomorrow-night
+	;'(linum ((t (:background "#DFAF8F"))))
+
   #+END_SRC
-** UX
+** Other
   #+BEGIN_SRC emacs-lisp
 	(menu-bar-mode -1) ; disable menubar
 	(toggle-scroll-bar -1) ; disable scrollbar
@@ -42,7 +48,8 @@
 	(setq inhibit-startup-message t) ; start with scratch buffer
 	(setq-default tab-width 4)
 	(global-linum-mode t) ;show line numbers
-	(setq-default line-spacing 0.4)
+	;(setq-default line-spacing 0.4)
+
 
 	;; use relative line numbers
 	(use-package linum-relative
@@ -53,7 +60,7 @@
 	)
 
 	;;Fonts
-	;(set-default-font "Monaco 13")
+	(set-default-font "Space Mono 11")
    #+END_SRC
 
 * Behavior
@@ -86,6 +93,13 @@
 			(autopair-global-mode t)
 		)
 	#+END_SRC
+* Projectile
+	Project management tool
+	#+BEGIN_SRC emacs-lisp
+		(use-package projectile
+			:ensure t
+		)
+	#+END_SRC
 * General keyindings
 	#+BEGIN_SRC emacs-lisp
 
@@ -100,12 +114,7 @@
 			"f" '(find-file :which-key "find file")
 			"w" '(save-buffer)
 			"'" '(neotree-toggle)
-			"p" '(project-find-file)
-
-			;;Splits
-			"sl" '(split-window-right)
-			"sj" '(split-window-below)
-			"sd" '(evil-window-delete)
+			"p" '(projectile-find-file)
 
 			;;Window navigation
 			"xl" '(evil-window-right)
@@ -204,10 +213,34 @@
 		:ensure t)
 
 	#+END_SRC
-** Web
+* Minor modes
+** Emmet
 	#+BEGIN_SRC emacs-lisp
-		(use-package web-mode
-		:ensure t)
+		(use-package emmet-mode
+			:ensure t
+			:init
+		)
+		(add-hook 'vue-mode 'emmet-mode)
+		(add-hook 'html-mode 'emmet-mode)
+		(add-hook 'web-mode 'emmet-mode)
+	#+END_SRC
+** GitGutter
+	#+BEGIN_SRC emacs-lisp
+		(use-package git-gutter
+		:ensure t
+		:init
+			(global-git-gutter-mode)
+			;(custom-set-variables
+			;'(git-gutter:window-width 2)
+			;'(git-gutter:modified-sign "~")
+			;'(git-gutter:added-sign "+")
+			;'(git-gutter:deleted-sign "-"))
+
+			;(set-face-background 'git-gutter:modified "none") ;; background color
+			(set-face-foreground 'git-gutter:added "green")
+			(set-face-foreground 'git-gutter:deleted "red")
+			(set-face-foreground 'git-gutter:modified "yellow")
+		)
 	#+END_SRC
 * Other
   

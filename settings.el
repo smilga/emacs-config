@@ -1,31 +1,197 @@
 
-;;Don`t show startup message
-(setq inhibit-startup-message t)
+(require 'package)
+(setq pacakge-enable-at-startup nil)
+(add-to-list 'package-archives
+            '("melpa" . "https://melpa.org/packages/"))
+
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+(package-refresh-contents)
+(package-install 'use-package))
+
+(use-package try
+:ensure t)
+
+(use-package ujelly-theme
+:ensure t)
+
+(use-package atom-one-dark-theme
+:ensure t)
+
+(add-to-list 'load-path "~/.emacs.d/themes/")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+
+(load-theme 'tomorrow-night t) ;load theme
+
+;; Customizing tomorrow theme
+;(custom-theme-set-faces
+;'tomorrow-night
+;'(linum ((t (:background "#DFAF8F"))))
+
+(menu-bar-mode -1) ; disable menubar
+(toggle-scroll-bar -1) ; disable scrollbar
+(tool-bar-mode -1) ; disable toolbar 
+(setq inhibit-startup-message t) ; start with scratch buffer
+(setq-default tab-width 4)
+(global-linum-mode t) ;show line numbers
+;(setq-default line-spacing 0.4)
 
 
-;;Take off toolbar
-(tool-bar-mode -1)
+;; use relative line numbers
+(use-package linum-relative
+        :ensure t
+        :config
+                (linum-relative-global-mode t)
+                (setq linum-relative-current-symbol "")
+)
+
+;;Fonts
+(set-default-font "Space Mono 11")
 
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
 (set-default 'truncate-lines t) ; stop wraping lines
 
-;; Add packages from melpa
-(require 'package)
-(setq pacakge-enable-at-startup nil)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
+(use-package neotree
+:ensure t
+:init
+(add-hook 'neotree-mode-hook
+                        (lambda ()
+                        (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+                        (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-quick-look)
+                        (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
+                        (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
+)
 
-(package-initialize)
+(use-package autopair
+        :ensure t
+        :init
+        (autopair-global-mode t)
+)
 
-;;Simple installing packages with use-package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+(use-package projectile
+        :ensure t
+)
 
-;;Package that allows to try another packages (use <M-x>try)
-(use-package try
-  :ensure t)
+(use-package general :ensure t
+        :config
+        (general-evil-setup t)
+
+        (general-define-key
+        :states '(normal emacs)
+        :prefix ","
+
+                "f" '(find-file :which-key "find file")
+                "w" '(save-buffer)
+                "'" '(neotree-toggle)
+                "p" '(projectile-find-file)
+
+                ;;Window navigation
+                "xl" '(evil-window-right)
+                "xj" '(evil-window-down)
+                "xk" '(evil-window-up)
+                "xh" '(evil-window-left)
+
+                ;;Buffer management
+                "l" '(switch-to-buffer)
+                "k" '(kill-buffer)
+
+                ;;Go mode
+                "gd" '(godef-jump)
+        )
+)
+
+(use-package flycheck
+        :ensure t
+        :init
+        (global-flycheck-mode)
+        (setq flycheck-check-syntax-automatically '(mode-enabled save))
+)
+
+(use-package js2-mode
+    :ensure t
+)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
+(add-to-list 'load-path "/home/shmiga/github.com/tern/emacs/")
+(autoload 'tern-mode "tern.el" nil t)
+
+(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+
+(eval-after-load 'tern
+'(progn
+        (require 'tern-auto-complete)
+        (tern-ac-setup)))
+
+(use-package vue-mode
+    :ensure t
+    :config
+    ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
+    (setq mmm-submode-decoration-level 0))
+
+(use-package go-mode
+        :ensure t
+        :init
+        (defun my-go-mode-hook ()
+        (add-hook 'before-save-hook 'gofmt-before-save) ; gofmt before every save
+        ; Godef jump key binding                                                      
+        (local-set-key (kbd "M-.") 'godef-jump)
+        (local-set-key (kbd "M-*") 'pop-tag-mark)
+        )
+        (add-hook 'go-mode-hook 'my-go-mode-hook)
+)
+
+(use-package go-autocomplete
+:ensure t)
+
+(use-package auto-complete-config
+:ensure t)
+
+(ac-config-default)
+
+(use-package exec-path-from-shell
+:ensure t)
+
+(defun my-go-mode-hook ()
+        ; Call Gofmt before saving
+        (add-hook 'before-save-hook 'gofmt-before-save)
+        ; Customize compile command to run go build
+        (if (not (string-match "go" compile-command))
+                (set (make-local-variable 'compile-command)
+                        "go build -v && go test -v && go vet"))
+        ; Godef jump key binding
+        (local-set-key (kbd "M-.") 'godef-jump)
+        (local-set-key (kbd "M-*") 'pop-tag-mark)
+        )
+
+(use-package php-mode
+:ensure t)
+
+(use-package emmet-mode
+        :ensure t
+        :init
+)
+(add-hook 'vue-mode 'emmet-mode)
+(add-hook 'html-mode 'emmet-mode)
+(add-hook 'web-mode 'emmet-mode)
+
+(use-package git-gutter
+:ensure t
+:init
+        (global-git-gutter-mode)
+        ;(custom-set-variables
+        ;'(git-gutter:window-width 2)
+        ;'(git-gutter:modified-sign "~")
+        ;'(git-gutter:added-sign "+")
+        ;'(git-gutter:deleted-sign "-"))
+
+        ;(set-face-background 'git-gutter:modified "none") ;; background color
+        (set-face-foreground 'git-gutter:added "green")
+        (set-face-foreground 'git-gutter:deleted "red")
+        (set-face-foreground 'git-gutter:modified "yellow")
+)
+
 
 
 ;;Package that shows shows shortkeys after <C-x> is pressed
@@ -33,11 +199,6 @@
   :ensure t
   :config (which-key-mode))
 
-;; Org-mode stuff
-(use-package org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 ;;Enables mode that shows buffers
 (setq indo-enable-flex-matching t)
@@ -134,26 +295,3 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
-
-(use-package general :ensure t
-  :config
-  (general-evil-setup t)
-
-  (general-define-key
-   :states '(normal insert emacs)
-   :prefix "C-SPC"
-   :non-normal-prefix "C-SPC"
-   "l" '(avy-goto-line)
-   "a" 'align-regexp
-   )
-
-  (general-define-key
-   :states '(normal motion insert emacs)
-   :prefix "SPC"
-   "ar" '(ranger :which-key "call ranger")
-   "g"  '(:ignore t :which-key "Git")
-   "gs" '(magit-status :which-key "git status")
-   "f" '(find-file :which-key "find file")
-   "w" '(save-buffer)
-   )
-)
