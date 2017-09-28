@@ -2,7 +2,7 @@
 (require 'package)
 (setq pacakge-enable-at-startup nil)
 (add-to-list 'package-archives
-            '("melpa" . "https://melpa.org/packages/"))
+                '("melpa" . "https://melpa.org/packages/"))
 
 (package-initialize)
 
@@ -13,30 +13,23 @@
 (use-package try
 :ensure t)
 
-(use-package ujelly-theme
-:ensure t)
-
-(use-package atom-one-dark-theme
-:ensure t)
-
 (add-to-list 'load-path "~/.emacs.d/themes/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
-(load-theme 'tomorrow-night t) ;load theme
+(load-theme 'shmiga-dark t) ;load theme
 
-;; Customizing tomorrow theme
-;(custom-theme-set-faces
-;'tomorrow-night
-;'(linum ((t (:background "#DFAF8F"))))
+;;Set fonts
+(set-default-font "Space Mono 11")
 
-(menu-bar-mode -1) ; disable menubar
-(toggle-scroll-bar -1) ; disable scrollbar
-(tool-bar-mode -1) ; disable toolbar 
-(setq inhibit-startup-message t) ; start with scratch buffer
-(setq-default tab-width 4)
-(global-linum-mode t) ;show line numbers
-;(setq-default line-spacing 0.4)
-
+(setq make-backup-files nil); stop creating backup~ files
+(setq auto-save-default nil); stop creating #autosave# files
+(set-default 'truncate-lines t); stop wraping lines
+(menu-bar-mode -1); disable menubar
+(toggle-scroll-bar -1); disable scrollbar
+(tool-bar-mode -1); disable toolbar 
+(setq inhibit-startup-message t); start with scratch buffer
+(setq-default tab-width 4); tab width
+(global-linum-mode t); show line numbers
 
 ;; use relative line numbers
 (use-package linum-relative
@@ -45,13 +38,6 @@
                 (linum-relative-global-mode t)
                 (setq linum-relative-current-symbol "")
 )
-
-;;Fonts
-(set-default-font "Space Mono 11")
-
-(setq make-backup-files nil) ; stop creating backup~ files
-(setq auto-save-default nil) ; stop creating #autosave# files
-(set-default 'truncate-lines t) ; stop wraping lines
 
 (use-package neotree
 :ensure t
@@ -62,6 +48,18 @@
                         (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-quick-look)
                         (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
                         (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
+:config
+ (setq
+  neo-autorefresh t
+  neo-force-change-root t
+  neo-smart-open t
+  neo-theme 'nerd
+  neo-vc-integration '(face char))
+)
+
+(custom-set-faces
+ '(neo-vc-added-face ((t (:foreground "lime green"))))
+ '(neo-vc-edited-face ((t (:foreground "gold"))))
 )
 
 (use-package autopair
@@ -73,6 +71,12 @@
 (use-package projectile
         :ensure t
 )
+
+(use-package helm
+:ensure t)
+
+(use-package helm-ag
+:ensure t)
 
 (use-package general :ensure t
         :config
@@ -97,6 +101,10 @@
                 "l" '(switch-to-buffer)
                 "k" '(kill-buffer)
 
+                ;;Searching
+                "ss" '(helm-do-ag)
+                "sh" '(helm-ag-project-root)
+
                 ;;Go mode
                 "gd" '(godef-jump)
         )
@@ -110,7 +118,7 @@
 )
 
 (use-package js2-mode
-    :ensure t
+        :ensure t
 )
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
@@ -125,10 +133,10 @@
         (tern-ac-setup)))
 
 (use-package vue-mode
-    :ensure t
-    :config
-    ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
-    (setq mmm-submode-decoration-level 0))
+        :ensure t
+        :config
+        ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
+        (setq mmm-submode-decoration-level 0))
 
 (use-package go-mode
         :ensure t
@@ -168,13 +176,19 @@
 (use-package php-mode
 :ensure t)
 
+(use-package evil
+  :ensure t
+  :init
+  (evil-mode 1)
+)
+
 (use-package emmet-mode
         :ensure t
         :init
+        (add-hook 'vue-mode 'emmet-mode)
+        (add-hook 'html-mode 'emmet-mode)
+        (add-hook 'web-mode 'emmet-mode)
 )
-(add-hook 'vue-mode 'emmet-mode)
-(add-hook 'html-mode 'emmet-mode)
-(add-hook 'web-mode 'emmet-mode)
 
 (use-package git-gutter
 :ensure t
@@ -190,6 +204,12 @@
         (set-face-foreground 'git-gutter:added "green")
         (set-face-foreground 'git-gutter:deleted "red")
         (set-face-foreground 'git-gutter:modified "yellow")
+)
+
+(use-package evil-mc 
+:ensure t
+:init
+(global-evil-mc-mode 1)
 )
 
 
@@ -208,28 +228,11 @@
 ;;Opens buffer list
 (defalias 'list-buffers 'ibuffer)
 
-;Sets tabbar at the top
-;(use-package tabbar
-;  :ensure t
-;  :config
-;  (tabbar-mode 1))
-
-;;For window browsing with <C-x>o
-(use-package ace-window
-  :ensure t
-  :init
-  (progn
-    (global-set-key [remap other-window] 'ace-window)
-    (custom-set-faces
-     '(aw-leading-char-face
-       ((t (:inherit ace-jump-face-foreground :height 3.0))))) 
-    ))
-
 ;;For swiper to use <C-x><C-f>
 
 (use-package counsel
   :ensure t
-  )
+)
 
 ;;Better searching in file with <C-s>
 (use-package swiper
@@ -266,11 +269,6 @@
     (global-auto-complete-mode t)
     ))
 
-;;Evil mode
-(use-package evil
-  :ensure t
-  :init
-  (evil-mode 1))
 
 ;;Themes
 (use-package color-theme

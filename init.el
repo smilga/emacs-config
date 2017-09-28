@@ -29,5 +29,8 @@
  ;; If there is more than one, they won't work right.
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
  '(font-lock-comment-delimiter-face ((t (:inherit font-lock-comment-face :foreground "#5f5f87" :slant italic))))
+ '(font-lock-constant-face ((t (:foreground "#56B6C2"))))
  '(font-lock-doc-face ((t (:inherit font-lock-string-face :foreground "#5F5F87"))))
- '(js2-object-property ((t (:foreground "gainsboro")))))
+ '(js2-object-property ((t (:foreground "gainsboro"))))
+ '(neo-vc-added-face ((t (:foreground "lime green"))))
+ '(neo-vc-edited-face ((t (:foreground "gold")))))
