@@ -140,6 +140,13 @@ Adds leader key
 	)
 )
 #+END_SRC
+* DumbJump
+Jump to definition package. Uses silversearch.
+#+BEGIN_SRC emacs-lisp
+(use-package dumb-jump
+  :config (setq dumb-jump-selector 'helm)
+  :ensure)
+#+END_SRC
 * Flycheck
 Syntax checker
 #+BEGIN_SRC emacs-lisp
@@ -148,7 +155,14 @@ Syntax checker
 	:init
 	(global-flycheck-mode)
 	(setq flycheck-check-syntax-automatically '(mode-enabled save))
+	:config
+	(setq
+	flycheck-disabled-checkers
+	(append flycheck-disabled-checkers
+		'(javascript-jshint))
+	)
 )
+(flycheck-add-mode 'javascript-eslint 'js2-mode)
 #+END_SRC
 * Major modes
 ** Javascript
