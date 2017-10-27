@@ -38,9 +38,6 @@
 	 ("XXX" . "#cc9393")
 	 ("XXXX" . "#cc9393")
 	 ("???" . "#cc9393"))))
- '(neo-force-change-root nil)
- '(neo-smart-open nil)
- '(neo-theme (quote ascii))
  '(package-selected-packages
    (quote
 	(json-mode evil-commentary auto-highlight-symbol dumb-jump evil-mc evil-multiedit multiedit evil evil-mode color-theme color-themes auto-complete counsel swiper ace-window which-key try use-package))))
@@ -62,8 +59,8 @@
  '(neo-vc-added-face ((t (:foreground "lime green"))))
  '(neo-vc-edited-face ((t (:foreground "gold"))))
  '(org-level-1 ((t (:background "#1d1f20" :foreground "#fb2874" :weight bold :height 1.0))))
- '(php-method-call ((t (:inherit php-function-call :foreground "#b6e63e"))))
  '(php-object-op ((t (:inherit default :foreground "#fb2874"))))
  '(php-variable-name ((t (:inherit font-lock-variable-name-face :foreground "white smoke"))))
  '(todo-mark ((t (:foreground "magenta" :weight bold))))
+ '(web-mode-error-face ((t (:underline (:color "yellow" :style wave)))))
  '(web-mode-variable-name-face ((t (:inherit font-lock-variable-name-face :foreground "white smoke")))))

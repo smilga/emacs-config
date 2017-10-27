@@ -19,7 +19,7 @@
 (use-package doom-themes
 :ensure t)
 
-(load-theme 'doom-molokai t) ;load theme
+(load-theme 'doom-vibrant t) ;load theme
 
 ;;Set fonts
 (set-default-font "Space Mono 11")
@@ -55,30 +55,31 @@
                         (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
                         (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
 
-                ;;Custom funciton to open netoreee in project root folder
-                (defun neotree-project-dir-toggle ()
-                "Open NeoTree using the project root, using find-file-in-project, or the current buffer directory."
-                (interactive)
-                (let ((project-dir
-                                (ignore-errors
-                                ;;; Pick one: projectile or find-file-in-project
-                                (projectile-project-root)
-                                ;(ffip-project-root)
-                                ))
-                                (file-name (buffer-file-name))
-                                )
-                        (if (and (fboundp 'neo-global--window-exists-p)
-                                        (neo-global--window-exists-p))
-                                (neotree-hide)
-                        (progn
-                                (neotree-show)
-                                (if project-dir
-                                        (neotree-dir project-dir))
-                                ))))
+;;Custom funciton to open netoreee in project root folder
+(defun neotree-project-dir-toggle ()
+"Open NeoTree using the project root, using find-file-in-project, or the current buffer directory."
+(interactive)
+(let ((project-dir
+        (ignore-errors
+        ;;; Pick one: projectile or find-file-in-project
+        (projectile-project-root)
+        ;(ffip-project-root)
+        ))
+        ;(file-name (buffer-file-name))
+        )
+(if (and (fboundp 'neo-global--window-exists-p)
+                (neo-global--window-exists-p))
+        (neotree-hide)
+(progn
+        (neotree-show)
+        (if project-dir
+                (neotree-dir project-dir))
+        ))))
+
 :config
  (setq
   neo-autorefresh t
-  neo-theme 'nerd
+  neo-theme 'ascii
   neo-vc-integration '(face char))
         (setq neo-force-change-root t)
 )
@@ -87,6 +88,8 @@
  '(neo-vc-added-face ((t (:foreground "lime green"))))
  '(neo-vc-edited-face ((t (:foreground "gold"))))
 )
+
+ ;(neo-theme (quote ascii))
 
 (use-package autopair
         :ensure t
