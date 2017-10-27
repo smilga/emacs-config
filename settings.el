@@ -16,7 +16,10 @@
 (add-to-list 'load-path "~/.emacs.d/themes/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
-(load-theme 'shmiga-dark t) ;load theme
+(use-package doom-themes
+:ensure t)
+
+(load-theme 'doom-molokai t) ;load theme
 
 ;;Set fonts
 (set-default-font "Space Mono 11")
@@ -30,7 +33,8 @@
 (setq inhibit-startup-message t); start with scratch buffer
 (setq-default tab-width 4); tab width
 (global-linum-mode t); show line numbers
-
+(show-paren-mode 1); show matching parenth
+(setq show-paren-delay 0); turn of matching delay
 ;; use relative line numbers
 (use-package linum-relative
         :ensure t
@@ -38,6 +42,8 @@
                 (linum-relative-global-mode t)
                 (setq linum-relative-current-symbol "")
 )
+;; dired use only one buffer
+(put 'dired-find-alternate-file 'disabled nil)
 
 (use-package neotree
 :ensure t
@@ -48,15 +54,35 @@
                         (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-quick-look)
                         (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
                         (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
+
+                ;;Custom funciton to open netoreee in project root folder
+                (defun neotree-project-dir-toggle ()
+                "Open NeoTree using the project root, using find-file-in-project, or the current buffer directory."
+                (interactive)
+                (let ((project-dir
+                                (ignore-errors
+                                ;;; Pick one: projectile or find-file-in-project
+                                (projectile-project-root)
+                                ;(ffip-project-root)
+                                ))
+                                (file-name (buffer-file-name))
+                                )
+                        (if (and (fboundp 'neo-global--window-exists-p)
+                                        (neo-global--window-exists-p))
+                                (neotree-hide)
+                        (progn
+                                (neotree-show)
+                                (if project-dir
+                                        (neotree-dir project-dir))
+                                ))))
 :config
  (setq
   neo-autorefresh t
-  neo-force-change-root t
-  neo-smart-open t
   neo-theme 'nerd
   neo-vc-integration '(face char))
+        (setq neo-force-change-root t)
 )
-
+(global-set-key (kbd "C-\\") #'neotree-project-dir-toggle)
 (custom-set-faces
  '(neo-vc-added-face ((t (:foreground "lime green"))))
  '(neo-vc-edited-face ((t (:foreground "gold"))))
@@ -70,6 +96,8 @@
 
 (use-package projectile
         :ensure t
+        :init
+        (projectile-global-mode)
 )
 
 (use-package helm
@@ -88,7 +116,6 @@
 
                 "f" '(find-file :which-key "find file")
                 "w" '(save-buffer)
-                "'" '(neotree-toggle)
                 "p" '(projectile-find-file)
 
                 ;;Window navigation
@@ -105,24 +132,102 @@
                 "ss" '(helm-do-ag)
                 "sh" '(helm-ag-project-root)
 
+                ;;Go to definition
+                "dg" '(dumb-jump-go)
+                "db" '(dumb-jump-back)
+                "ds" '(dumb-jump-quick-look)
+
                 ;;Go mode
                 "gd" '(godef-jump)
+
+                ;;JS import
+                "ii" '(js-import)
         )
 )
+
+(use-package dumb-jump
+  :config (setq dumb-jump-selector 'helm)
+  :ensure)
 
 (use-package flycheck
         :ensure t
         :init
         (global-flycheck-mode)
         (setq flycheck-check-syntax-automatically '(mode-enabled save))
+        (setq-default flycheck-temp-prefix "~/.eslintrc")
+        :config
+        (setq
+        flycheck-disabled-checkers
+        (append flycheck-disabled-checkers
+                '(javascript-jshint))
+        )
 )
+(flycheck-add-mode 'javascript-eslint 'js2-mode)
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+(flycheck-add-mode 'javascript-eslint 'vue-mode)
+
+;(use-package company
+;:ensure t
+;:init
+;(add-hook 'after-init-hook 'global-company-mode)
+;:config
+;(setq company-dabbrev-downcase 0)
+;)
+
+(use-package auto-complete
+  :ensure t
+  :init
+  (progn
+    (ac-config-default)
+    (global-auto-complete-mode t)
+    ))
+
+(use-package imenu-list
+:ensure t
+:config
+(setq imenu-list-auto-resize t)
+(setq imenu-list-focus-after-activation t)
+)
+(global-set-key (kbd "C-'") #'imenu-list-smart-toggle)
+
+
+
+(use-package yasnippet
+:ensure t
+:init
+(yas-global-mode 1)
+)
+
+(use-package yasnippet-snippets
+:ensure t)
+
+(use-package php-auto-yasnippets
+:ensure t
+:config
+(payas/ac-setup)
+)
+
+(use-package hl-todo
+:ensure t
+:init
+(global-hl-todo-mode t)
+)
+
+(use-package highlight-numbers
+:ensure t
+:config
+(add-hook 'prog-mode-hook 'highlight-numbers-mode)
+)
+
+(use-package js-import
+:ensure t)
 
 (use-package js2-mode
-        :ensure t
-)
+:ensure t
+:init
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-
 (add-to-list 'load-path "/home/shmiga/github.com/tern/emacs/")
+)
 (autoload 'tern-mode "tern.el" nil t)
 
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
@@ -132,11 +237,18 @@
         (require 'tern-auto-complete)
         (tern-ac-setup)))
 
-(use-package vue-mode
-        :ensure t
-        :config
-        ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
-        (setq mmm-submode-decoration-level 0))
+;(use-package vue-mode
+;       :ensure t
+;       :config
+;       ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
+;       (setq mmm-submode-decoration-level 0))
+
+(use-package web-mode
+:ensure t
+:init
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.blade.php\\'" . web-mode))
+)
 
 (use-package go-mode
         :ensure t
@@ -185,9 +297,9 @@
 (use-package emmet-mode
         :ensure t
         :init
-        (add-hook 'vue-mode 'emmet-mode)
-        (add-hook 'html-mode 'emmet-mode)
-        (add-hook 'web-mode 'emmet-mode)
+        (add-hook 'vue-mode-hook 'emmet-mode)
+        (add-hook 'html-mode-hook 'emmet-mode)
+        (add-hook 'web-mode-hook 'emmet-mode)
 )
 
 (use-package git-gutter
@@ -206,10 +318,29 @@
         (set-face-foreground 'git-gutter:modified "yellow")
 )
 
-(use-package evil-mc 
+(use-package multiple-cursors
+:ensure t)
+(global-set-key (kbd "C-l") 'mc/mark-next-like-this)
+
+;(use-package rainbow-delimiters
+;:ensure t
+;:init
+;(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+;)
+
+(use-package json-mode
+:ensure t)
+
+(use-package evil-commentary
 :ensure t
 :init
-(global-evil-mc-mode 1)
+(evil-commentary-mode t)
+)
+
+(use-package auto-highlight-symbol
+:ensure t
+:init
+(auto-highlight-symbol-mode 1)
 )
 
 
@@ -221,9 +352,9 @@
 
 
 ;;Enables mode that shows buffers
-(setq indo-enable-flex-matching t)
-(setq ido-everywhere t)
-(ido-mode 1)
+;(setq indo-enable-flex-matching t)
+;(setq ido-everywhere t)
+;(ido-mode 1)
 
 ;;Opens buffer list
 (defalias 'list-buffers 'ibuffer)
@@ -260,14 +391,6 @@
     (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
     ))
 
-;;Autocomplete
-(use-package auto-complete
-  :ensure t
-  :init
-  (progn
-    (ac-config-default)
-    (global-auto-complete-mode t)
-    ))
 
 
 ;;Themes

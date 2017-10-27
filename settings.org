@@ -59,6 +59,8 @@ Load themes from local folder
 		(linum-relative-global-mode t)
 		(setq linum-relative-current-symbol "")
 )
+;; dired use only one buffer
+(put 'dired-find-alternate-file 'disabled nil)
 #+END_SRC
 * TreeView
 #+BEGIN_SRC emacs-lisp
@@ -71,20 +73,39 @@ Load themes from local folder
 			(define-key evil-normal-state-local-map (kbd "SPC") 'neotree-quick-look)
 			(define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
 			(define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
+
+		;;Custom funciton to open netoreee in project root folder
+		(defun neotree-project-dir-toggle ()
+		"Open NeoTree using the project root, using find-file-in-project, or the current buffer directory."
+		(interactive)
+		(let ((project-dir
+				(ignore-errors
+				;;; Pick one: projectile or find-file-in-project
+				(projectile-project-root)
+				;(ffip-project-root)
+				))
+				(file-name (buffer-file-name))
+				)
+			(if (and (fboundp 'neo-global--window-exists-p)
+					(neo-global--window-exists-p))
+				(neotree-hide)
+			(progn
+				(neotree-show)
+				(if project-dir
+					(neotree-dir project-dir))
+				))))
 :config
  (setq
   neo-autorefresh t
-  neo-force-change-root t
-  neo-smart-open t
   neo-theme 'nerd
   neo-vc-integration '(face char))
+	(setq neo-force-change-root t)
 )
-(global-set-key (kbd "C-\\") #'neotree-toggle)
+(global-set-key (kbd "C-\\") #'neotree-project-dir-toggle)
 (custom-set-faces
  '(neo-vc-added-face ((t (:foreground "lime green"))))
  '(neo-vc-edited-face ((t (:foreground "gold"))))
 )
-
 #+END_SRC
 * Autopair
 Automaticly close brackets
@@ -100,6 +121,8 @@ Project management tool
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
 	:ensure t
+	:init
+	(projectile-global-mode)
 )
 #+END_SRC
 * Searhcing
@@ -146,6 +169,9 @@ Adds leader key
 
 		;;Go mode
 		"gd" '(godef-jump)
+
+		;;JS import
+		"ii" '(js-import)
 	)
 )
 #+END_SRC
@@ -164,6 +190,7 @@ Syntax checker
 	:init
 	(global-flycheck-mode)
 	(setq flycheck-check-syntax-automatically '(mode-enabled save))
+	(setq-default flycheck-temp-prefix "~/.eslintrc")
 	:config
 	(setq
 	flycheck-disabled-checkers
@@ -172,6 +199,8 @@ Syntax checker
 	)
 )
 (flycheck-add-mode 'javascript-eslint 'js2-mode)
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+(flycheck-add-mode 'javascript-eslint 'vue-mode)
 #+END_SRC
 * Company
 Autocomplete package
@@ -250,15 +279,20 @@ Script automaticly generates js import path
 
 (use-package evil-magit
 :ensure t)
+* Js import
+#+BEGIN_SRC emacs-lisp
+(use-package js-import
+:ensure t)
+#+END_SRC
 * Major modes
 ** Javascript
 #+BEGIN_SRC emacs-lisp
 (use-package js2-mode
-	:ensure t
-)
+:ensure t
+:init
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-
 (add-to-list 'load-path "/home/shmiga/github.com/tern/emacs/")
+)
 (autoload 'tern-mode "tern.el" nil t)
 
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
@@ -269,12 +303,22 @@ Script automaticly generates js import path
 	(tern-ac-setup)))
 #+END_SRC
 ** Vuejs
+Use web mode instead of vue-mode
 #+BEGIN_SRC emacs-lisp
-(use-package vue-mode
-	:ensure t
-	:config
-	;; 0, 1, or 2, representing (respectively) none, low, and high coloring
-	(setq mmm-submode-decoration-level 0))
+;(use-package vue-mode
+;	:ensure t
+;	:config
+;	;; 0, 1, or 2, representing (respectively) none, low, and high coloring
+;	(setq mmm-submode-decoration-level 0))
+#+END_SRC
+** Web Mode
+#+BEGIN_SRC emacs-lisp
+(use-package web-mode
+:ensure t
+:init
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.blade.php\\'" . web-mode))
+)
 #+END_SRC
 ** Golang
 #+BEGIN_SRC emacs-lisp
@@ -334,9 +378,9 @@ Adds VIM keyindings
 (use-package emmet-mode
 	:ensure t
 	:init
-	(add-hook 'vue-mode 'emmet-mode)
-	(add-hook 'html-mode 'emmet-mode)
-	(add-hook 'web-mode 'emmet-mode)
+	(add-hook 'vue-mode-hook 'emmet-mode)
+	(add-hook 'html-mode-hook 'emmet-mode)
+	(add-hook 'web-mode-hook 'emmet-mode)
 )
 #+END_SRC
 ** GitGutter
@@ -359,12 +403,6 @@ Adds VIM keyindings
 #+END_SRC
 ** Multiple cursors
 #+BEGIN_SRC emacs-lisp
-;(use-package evil-mc 
-;:ensure t
-;:init
-;(global-evil-mc-mode 1)
-;)
-
 (use-package multiple-cursors
 :ensure t)
 (global-set-key (kbd "C-l") 'mc/mark-next-like-this)
@@ -378,6 +416,29 @@ TODO - customize colors
 ;:init
 ;(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 ;)
+#+END_SRC
+** Json mode
+#+BEGIN_SRC emacs-lisp
+(use-package json-mode
+:ensure t)
+#+END_SRC
+* Commentary
+Evil commentary use gcc to comment or uncommnt
+#+BEGIN_SRC emacs-lisp
+(use-package evil-commentary
+:ensure t
+:init
+(evil-commentary-mode t)
+)
+#+END_SRC
+* Auto highlight symbol
+Highlights same symbols in current buffer
+#+BEGIN_SRC emacs-lisp
+(use-package auto-highlight-symbol
+:ensure t
+:init
+(auto-highlight-symbol-mode 1)
+)
 #+END_SRC
 * Other
   
@@ -393,9 +454,9 @@ TODO - customize colors
 
 
 ;;Enables mode that shows buffers
-(setq indo-enable-flex-matching t)
-(setq ido-everywhere t)
-(ido-mode 1)
+;(setq indo-enable-flex-matching t)
+;(setq ido-everywhere t)
+;(ido-mode 1)
 
 ;;Opens buffer list
 (defalias 'list-buffers 'ibuffer)
@@ -459,6 +520,7 @@ TODO - customize colors
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
 #+END_SRC
+
 
   
 * TODO 
