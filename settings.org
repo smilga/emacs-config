@@ -32,7 +32,7 @@ Load themes from local folder
 (use-package doom-themes
 :ensure t)
 
-(load-theme 'doom-molokai t) ;load theme
+(load-theme 'doom-vibrant t) ;load theme
 #+END_SRC
 ** Fonts
 #+BEGIN_SRC emacs-lisp
