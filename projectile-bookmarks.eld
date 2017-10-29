@@ -1,1 +1,1 @@
-("~/.emacs.d/" "~/Projects/e.maxtraffic/" "~/Projects/leadscrape/" "~/docs/laravel-docs/" "~/Projects/push.maxtraffic/")
+("~/go/src/bitbucket.org/leadsCollection/" "~/.emacs.d/" "~/Projects/e.maxtraffic/" "~/Projects/leadscrape/" "~/docs/laravel-docs/" "~/Projects/push.maxtraffic/")

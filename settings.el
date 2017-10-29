@@ -13,6 +13,8 @@
 (use-package try
 :ensure t)
 
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+
 (add-to-list 'load-path "~/.emacs.d/themes/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
@@ -22,7 +24,7 @@
 (load-theme 'doom-vibrant t) ;load theme
 
 ;;Set fonts
-(set-default-font "Space Mono 11")
+(set-default-font "Space Mono 10")
 
 (setq make-backup-files nil); stop creating backup~ files
 (setq auto-save-default nil); stop creating #autosave# files
@@ -253,6 +255,12 @@
 (add-to-list 'auto-mode-alist '("\\.blade.php\\'" . web-mode))
 )
 
+(setenv "GOPATH" "/home/shmiga/go")
+(setq exec-path (append exec-path '("/home/shmiga/go/bin")))
+
+(require 'go-guru)
+(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+
 (use-package go-mode
         :ensure t
         :init
@@ -279,6 +287,7 @@
 (defun my-go-mode-hook ()
         ; Call Gofmt before saving
         (add-hook 'before-save-hook 'gofmt-before-save)
+        (setq gofmt-command "goimports")
         ; Customize compile command to run go build
         (if (not (string-match "go" compile-command))
                 (set (make-local-variable 'compile-command)
