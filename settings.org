@@ -65,6 +65,9 @@ Load themes from local folder
 )
 ;; dired use only one buffer
 (put 'dired-find-alternate-file 'disabled nil)
+;; dired automaticly revert
+(add-hook 'dired-mode-hook 'auto-revert-mode)
+(global-auto-revert-mode 1)
 #+END_SRC
 * TreeView
 #+BEGIN_SRC emacs-lisp
@@ -168,6 +171,12 @@ Adds leader key
 		;;Searching
 		"ss" '(helm-do-ag)
 		"sh" '(helm-ag-project-root)
+		"sr" '(projectile-replace)
+
+		;;Dired
+		"dd" '(dired)
+		"du" '(dired-up-directory)
+
 
 		;;Go to definition
 		"dg" '(dumb-jump-go)
