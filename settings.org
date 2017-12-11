@@ -188,6 +188,7 @@ Adds leader key
 
 		;;JS import
 		"ii" '(js-import)
+		"id" '(js-import-dev)
 	)
 )
 #+END_SRC
@@ -300,6 +301,14 @@ Script automaticly generates js import path
 (use-package js-import
 :ensure t)
 #+END_SRC
+* Rainbow-mode
+(define-globalized-minor-mode my-global-rainbow-mode rainbow-mode
+  (lambda () (rainbow-mode 1)))
+(use-package rainbow-mode
+:ensure t
+:init 
+(my-global-rainbow-mode 1)
+)
 * Major modes
 ** Javascript
 #+BEGIN_SRC emacs-lisp
@@ -466,8 +475,28 @@ Highlights same symbols in current buffer
 * Other
   
 #+BEGIN_SRC emacs-lisp
+;;Colorize cursor depending on mode
+(setq evil-emacs-state-cursor '("red" box))
+(setq evil-normal-state-cursor '("green" box))
+(setq evil-visual-state-cursor '("orange" box))
+(setq evil-insert-state-cursor '("red" bar))
+(setq evil-replace-state-cursor '("red" bar))
+(setq evil-operator-state-cursor '("red" hollow))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+;; esc quits
+(define-key key-translation-map (kbd "ESC") (kbd "C-g"))
+
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package powerline
+:ensure t
+;:config
+;(powerline-evil-vim-color-theme)
+;(display-time-mode t)
+)
+#+END_SRC
 #+BEGIN_SRC emacs-lisp
 
 ;;Package that shows shows shortkeys after <C-x> is pressed
