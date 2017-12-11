@@ -228,20 +228,17 @@ Syntax checker
 * Company
 Autocomplete package
 #+BEGIN_SRC emacs-lisp
-;(use-package company
-;:ensure t
-;:init
-;(add-hook 'after-init-hook 'global-company-mode)
-;:config
-;(setq company-dabbrev-downcase 0)
-;)
-
 (use-package auto-complete
   :ensure t
   :init
   (progn
     (ac-config-default)
     (global-auto-complete-mode t)
+	(setq ac-delay             0.1)
+	(setq ac-menu-height       20)
+	(setq ac-auto-start t)
+	(setq ac-use-comphist t)
+	(setq ac-show-menu-immediately-on-auto-complete t)
     ))
 #+END_SRC
 * Powerline
@@ -374,9 +371,6 @@ Use web mode instead of vue-mode
 ;;Autocomplete stuff
 (use-package go-autocomplete
 :ensure t)
-(use-package auto-complete-config
-:ensure t)
-(ac-config-default)
 
 (use-package exec-path-from-shell
 :ensure t)
@@ -489,6 +483,19 @@ Highlights same symbols in current buffer
 :ensure t)
 (use-package evil-magit
 :ensure t)
+#+END_SRC
+* Align
+#+BEGIN_SRC emacs-lisp
+(use-package evil-lion
+  :ensure t
+  :bind (:map evil-normal-state-map
+         ("g l " . evil-lion-left)
+         ("g L " . evil-lion-right)
+         :map evil-visual-state-map
+         ("g l " . evil-lion-left)
+         ("g L " . evil-lion-right))
+  :config
+  (evil-lion-mode))
 #+END_SRC
 * Other
   
