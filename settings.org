@@ -367,16 +367,21 @@ Use web mode instead of vue-mode
 	(add-hook 'go-mode-hook 'my-go-mode-hook)
 )
 
+;;Autocomplete stuff
 (use-package go-autocomplete
 :ensure t)
-
 (use-package auto-complete-config
 :ensure t)
-
 (ac-config-default)
 
 (use-package exec-path-from-shell
 :ensure t)
+
+(use-package go-eldoc
+	:ensure t
+	:init
+	(add-hook 'go-mode-hook 'go-eldoc-setup)
+)
 
 (defun my-go-mode-hook ()
 	; Call Gofmt before saving
