@@ -68,6 +68,8 @@ Load themes from local folder
 ;; dired automaticly revert
 (add-hook 'dired-mode-hook 'auto-revert-mode)
 (global-auto-revert-mode 1)
+;;Turn off bells
+(setq ring-bell-function 'ignore)
 #+END_SRC
 * TreeView
 #+BEGIN_SRC emacs-lisp
