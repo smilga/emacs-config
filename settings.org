@@ -70,6 +70,9 @@ Load themes from local folder
 (global-auto-revert-mode 1)
 ;;Turn off bells
 (setq ring-bell-function 'ignore)
+;;Customizations seperate file from init.el
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
 #+END_SRC
 * TreeView
 #+BEGIN_SRC emacs-lisp
@@ -131,6 +134,7 @@ Automaticly close brackets
 * Projectile
 Project management tool
 #+BEGIN_SRC emacs-lisp
+(setq projectile-known-projects-file "~/.emacs.d/misc/projectile-bookmarks.eld")
 (use-package projectile
 	:ensure t
 	:init
