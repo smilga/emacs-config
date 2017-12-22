@@ -8,9 +8,10 @@
  '(custom-safe-themes
    (quote
 	("1d079355c721b517fdc9891f0fda927fe3f87288f2e6cc3b8566655a64ca5453" "b3bcf1b12ef2a7606c7697d71b934ca0bdd495d52f901e73ce008c4c9825a3aa" "d5b121d69e48e0f2a84c8e4580f0ba230423391a78fcb4001ccb35d02494d79e" "946e871c780b159c4bb9f580537e5d2f7dba1411143194447604ecbaf01bd90c" "6f11ad991da959fa8de046f7f8271b22d3a97ee7b6eca62c81d5a917790a45d9" "b81bfd85aed18e4341dbf4d461ed42d75ec78820a60ce86730fc17fc949389b2" default)))
+ '(flycheck-gometalinter-vendor t)
  '(package-selected-packages
    (quote
-	(evil-lion evil evil-mode color-theme color-themes auto-complete counsel swiper ace-window which-key try use-package))))
+	(evil evil-mode color-theme color-themes auto-complete counsel swiper ace-window which-key try use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -20,6 +21,7 @@
  '(highlight-numbers-number ((t (:foreground "#a991f1" :weight light))))
  '(neo-vc-added-face ((t (:foreground "lime green"))))
  '(neo-vc-edited-face ((t (:foreground "gold"))))
+ '(org-level-1 ((t (:background "#23272e" :foreground "#51afef" :weight bold :height 1.0))))
  '(php-$this ((t nil)))
  '(php-$this-sigil ((t nil)))
  '(php-function-call ((t (:inherit font-lock-function-name-face)))))

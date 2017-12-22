@@ -164,20 +164,14 @@ Adds leader key
 		"w" '(save-buffer)
 		"p" '(projectile-find-file)
 
-		;;Window navigation
-		"xl" '(evil-window-right)
-		"xj" '(evil-window-down)
-		"xk" '(evil-window-up)
-		"xh" '(evil-window-left)
-
 		;;Buffer management
 		"l" '(switch-to-buffer)
 		"k" '(kill-buffer)
 
 		;;Searching
-		"ss" '(helm-do-ag)
-		"sh" '(helm-ag-project-root)
+		"ss" '(helm-do-ag-project-root)
 		"sr" '(projectile-replace)
+		"sd" '(helm-do-ag)
 
 		;;Dired
 		"dd" '(dired)
@@ -269,6 +263,8 @@ Script automaticly generates js import path
 (yas-global-mode 1)
 )
 
+(define-key yas-minor-mode-map (kbd "<C-SPC>") 'yas-expand)
+
 (use-package yasnippet-snippets
 :ensure t)
 
@@ -299,7 +295,10 @@ Script automaticly generates js import path
 :ensure t)
 
 (use-package evil-magit
-:ensure t)
+:ensure t
+:config
+(evil-magit-init)
+)
 * Js import
 #+BEGIN_SRC emacs-lisp
 (use-package js-import
@@ -467,8 +466,22 @@ Highlights same symbols in current buffer
   (evil-lion-mode))
 #+END_SRC
 * Other
-  
 #+BEGIN_SRC emacs-lisp
+(defvar my-keys-minor-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-j") 'evil-window-down)
+    (define-key map (kbd "C-k") 'evil-window-up)
+    (define-key map (kbd "C-h") 'evil-window-left)
+    (define-key map (kbd "C-l") 'evil-window-right)
+    map)
+  "my-keys-minor-mode keymap.")
+
+(define-minor-mode my-keys-minor-mode
+  "A minor mode so that my key settings override annoying major modes."
+  :init-value t
+  :lighter " my-keys")
+
+(my-keys-minor-mode 1)
 #+END_SRC
   
 #+BEGIN_SRC emacs-lisp
@@ -569,4 +582,5 @@ Highlights same symbols in current buffer
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
 #+END_SRC
+
 
