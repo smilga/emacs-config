@@ -436,13 +436,12 @@ Adds VIM keyindings
 #+END_SRC
 ** Rainbow delimitiers
 Colors pairs of brackets according to their depth
-TODO - customize colors
 #+BEGIN_SRC emacs-lisp
-;(use-package rainbow-delimiters
-;:ensure t
-;:init
-;(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-;)
+(use-package rainbow-delimiters
+:ensure t
+:init
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+)
 #+END_SRC
 ** Json mode
 #+BEGIN_SRC emacs-lisp
