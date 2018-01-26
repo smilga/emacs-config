@@ -3,8 +3,10 @@
 /ido.last
 /auto-save-list
 /ac-comphist.dat
+.mc-lists.el
 /recentf
 /misc
+custom.el
 settings.el
 desktops
 projectile-bookmarks.eld

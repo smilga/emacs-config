@@ -519,7 +519,7 @@ Highlights same symbols in current buffer
     (define-key map (kbd "C-k") 'evil-window-up)
     (define-key map (kbd "C-h") 'evil-window-left)
     (define-key map (kbd "C-l") 'evil-window-right)
-    (global-set-key (kbd "C-n") 'mc/mark-next-like-this)
+	(global-set-key (kbd "C-n") 'mc/mark-next-like-this)
     map)
   "my-keys-minor-mode keymap.")
 
