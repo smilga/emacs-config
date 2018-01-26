@@ -25,6 +25,8 @@ Use <M-x>try <RET> package name <RET> and try that package
 ** Load paths
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/lisp/")
+(require 'highlight-chars)
+(add-hook 'font-lock-mode-hook 'hc-highlight-tabs)
 #+END_SRC
 * Visual
 ** Theme
@@ -73,6 +75,14 @@ Load themes from local folder
 ;;Customizations seperate file from init.el
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
+;;Use spaces instead of tabs
+(setq c-basic-indent 4)
+(setq tab-width 4)
+(setq-default indent-tabs-mode nil)
+;;Show
+(setq-default show-trailing-whitespace t)
+;;C-U scroll top evil
+(setq evil-want-C-u-scroll t)
 #+END_SRC
 * TreeView
 #+BEGIN_SRC emacs-lisp
@@ -229,10 +239,10 @@ Autocomplete package
   (progn
     (ac-config-default)
     (global-auto-complete-mode t)
-	(setq ac-delay             0.1)
 	(setq ac-menu-height       20)
 	(setq ac-auto-start t)
 	(setq ac-use-comphist t)
+	(setq ac-ignore-case 0)
 	(setq ac-show-menu-immediately-on-auto-complete t)
     ))
 #+END_SRC
@@ -414,19 +424,27 @@ Adds VIM keyindings
 #+END_SRC
 ** Rainbow delimitiers
 Colors pairs of brackets according to their depth
-TODO - customize colors
 #+BEGIN_SRC emacs-lisp
-;(use-package rainbow-delimiters
-;:ensure t
-;:init
-;(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-;)
+(use-package rainbow-delimiters
+:ensure t
+:init
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+)
 #+END_SRC
 ** Json mode
 #+BEGIN_SRC emacs-lisp
 (use-package json-mode
 :ensure t)
 #+END_SRC
+** SmartTab
+#+BEGIN_SRC emacs-lisp
+(use-package smart-tab
+:ensure t
+:init
+(global-smart-tab-mode 1)
+)
+#+END_SRC
+
 * Commentary
 Evil commentary use gcc to comment or uncommnt
 #+BEGIN_SRC emacs-lisp
@@ -465,6 +483,12 @@ Highlights same symbols in current buffer
   :config
   (evil-lion-mode))
 #+END_SRC
+* Redis
+#+BEGIN_SRC emacs-lisp
+(use-package redis
+:ensure t)
+#+END_SRC
+
 * Other
 #+BEGIN_SRC emacs-lisp
 (defvar my-keys-minor-mode-map
@@ -473,6 +497,7 @@ Highlights same symbols in current buffer
     (define-key map (kbd "C-k") 'evil-window-up)
     (define-key map (kbd "C-h") 'evil-window-left)
     (define-key map (kbd "C-l") 'evil-window-right)
+	(define-key map (kbd "C-n") 'mc\mark-next-like-this)
     map)
   "my-keys-minor-mode keymap.")
 
