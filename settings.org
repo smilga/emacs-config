@@ -3,11 +3,24 @@
 Load packages from melpa
 #+BEGIN_SRC emacs-lisp
 (require 'package)
+(setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
+                          ("gnu" . "http://elpa.gnu.org/packages/")
+                          ("marmalade" . "http://marmalade-repo.org/packages/")))
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+
+(package-initialize)
+(setq url-http-attempt-keepalives nil)
+
+(require 'package)
 (setq pacakge-enable-at-startup nil)
 (add-to-list 'package-archives
 		'("melpa" . "https://melpa.org/packages/"))
 
 (package-initialize)
+(when (not package-archive-contents)
+    (package-refresh-contents))
+
 #+END_SRC
 ** Package installation with "use package"
 Easy way to install package with use-package
@@ -35,18 +48,22 @@ Load themes from local folder
 (add-to-list 'load-path "~/.emacs.d/themes/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
-(use-package doom-themes
-:ensure t)
+;(use-package doom-themes
+;:ensure t)
+;(load-theme 'doom-vibrant t) ;load theme
 
-(load-theme 'doom-vibrant t) ;load theme
+(use-package atom-one-dark
+:ensure t)
+(load-theme 'atom-one-dark t)
 #+END_SRC
 ** Fonts
 #+BEGIN_SRC emacs-lisp
 ;;Set fonts
-(set-default-font "Space Mono 10")
+;(set-default-font "Space Mono 10")
 #+END_SRC
 * Behavior
 #+BEGIN_SRC emacs-lisp
+(setq debug-on-error t)
 (setq make-backup-files nil); stop creating backup~ files
 (setq auto-save-default nil); stop creating #autosave# files
 (set-default 'truncate-lines t); stop wraping lines
@@ -165,47 +182,45 @@ Adds leader key
 (use-package general :ensure t
 	:config
 	(general-evil-setup t)
-
-
 	(general-define-key
 	:states '(normal emacs)
 	:prefix ","
 
-		"f" '(find-file :which-key "find file")
-		"w" '(save-buffer)
-		"p" '(projectile-find-file)
+		"f" 'find-file :which-key "find file"
+		"w" 'save-buffer
+		"p" 'projectile-find-file
 
 		;;Buffer management
-		"l" '(switch-to-buffer)
-		"k" '(kill-buffer)
+		"l" 'switch-to-buffer
+		"k" 'kill-buffer
 
 		;;Searching
-		"ss" '(helm-do-ag-project-root)
-		"sr" '(projectile-replace)
-		"sd" '(helm-do-ag)
+		"ss" 'helm-do-ag-project-root
+		"sr" 'projectile-replace
+		"sd" 'helm-do-ag
 
 		;;Dired
-		"dd" '(dired)
-		"du" '(dired-up-directory)
+		"dd" 'dired
+		"du" 'dired-up-directory
 
 
 		;;Go to definition
-		"b" '(dumb-jump-back)
-		"g" '(dumb-jump-go)
-		"j" '(dumb-jump-quick-look)
+		"b" 'dumb-jump-back
+		"g" 'dumb-jump-go
+		"j" 'dumb-jump-quick-look
 
 		;;Go mode
 
 		;;JS import
-		"ii" '(js-import)
-		"id" '(js-import-dev)
+		"ii" 'js-import
+		"id" 'js-import-dev
 	)
 
 	(general-define-key 
 	:states '(normal emacs)
 	:keymaps 'go-mode-map
 	:prefix ","
-		"g" '(godef-jump)
+		"g" 'godef-jump
 	)
 )
 #+END_SRC
@@ -367,12 +382,8 @@ Use web mode instead of vue-mode
 #+END_SRC
 ** Golang
 #+BEGIN_SRC emacs-lisp
-(setq shell-command-switch "-ic")
 (use-package exec-path-from-shell
 :ensure t)
-
-(require 'go-guru)
-(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
 
 (use-package go-mode
 	:ensure t
@@ -383,6 +394,10 @@ Use web mode instead of vue-mode
  	)
  	(add-hook 'go-mode-hook 'my-go-mode-hook)
 )
+
+(require 'go-guru)
+(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+
 
 (use-package go-autocomplete
 :ensure t)
@@ -605,28 +620,8 @@ Highlights same symbols in current buffer
 
 
 ;;Themes
-(use-package color-theme
-  :ensure t)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
- '(custom-safe-themes
-   (quote
-    ("1d079355c721b517fdc9891f0fda927fe3f87288f2e6cc3b8566655a64ca5453" "b3bcf1b12ef2a7606c7697d71b934ca0bdd495d52f901e73ce008c4c9825a3aa" "d5b121d69e48e0f2a84c8e4580f0ba230423391a78fcb4001ccb35d02494d79e" "946e871c780b159c4bb9f580537e5d2f7dba1411143194447604ecbaf01bd90c" "6f11ad991da959fa8de046f7f8271b22d3a97ee7b6eca62c81d5a917790a45d9" "b81bfd85aed18e4341dbf4d461ed42d75ec78820a60ce86730fc17fc949389b2" default)))
- '(package-selected-packages
-   (quote
-    (evil evil-mode color-theme color-themes auto-complete counsel swiper ace-window which-key try use-package))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+;(use-package color-theme
+;  :ensure t)
 
 #+END_SRC
 
