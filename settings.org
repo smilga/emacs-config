@@ -38,8 +38,8 @@ Use <M-x>try <RET> package name <RET> and try that package
 ** Load paths
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/lisp/")
-(require 'highlight-chars)
-(add-hook 'font-lock-mode-hook 'hc-highlight-tabs)
+;(require 'highlight-chars)
+;(add-hook 'font-lock-mode-hook 'hc-highlight-tabs)
 #+END_SRC
 * Visual
 ** Theme
@@ -48,22 +48,21 @@ Load themes from local folder
 (add-to-list 'load-path "~/.emacs.d/themes/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
-;(use-package doom-themes
-;:ensure t)
-;(load-theme 'doom-vibrant t) ;load theme
-
-(use-package atom-one-dark
+(use-package doom-themes
 :ensure t)
-(load-theme 'atom-one-dark t)
+(load-theme 'doom-vibrant t) ;load theme
 #+END_SRC
 ** Fonts
 #+BEGIN_SRC emacs-lisp
 ;;Set fonts
-;(set-default-font "Space Mono 10")
+(set-default-font "Roboto Mono 10")
+;(set-face-attribute 'default nil :height 100)
+(setq-default line-spacing 3) 
+;(setq-default line-height '(64 64))
 #+END_SRC
 * Behavior
 #+BEGIN_SRC emacs-lisp
-(setq debug-on-error t)
+(setq debug-on-error nil)
 (setq make-backup-files nil); stop creating backup~ files
 (setq auto-save-default nil); stop creating #autosave# files
 (set-default 'truncate-lines t); stop wraping lines
@@ -97,7 +96,7 @@ Load themes from local folder
 (setq tab-width 4)
 (setq-default indent-tabs-mode nil)
 ;;Show
-(setq-default show-trailing-whitespace t)
+;(setq-default show-trailing-whitespace t)
 ;;C-U scroll top evil
 (setq evil-want-C-u-scroll t)
 #+END_SRC
@@ -377,6 +376,8 @@ Use web mode instead of vue-mode
 :ensure t
 :init
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.gohtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.blade.php\\'" . web-mode))
 )
 #+END_SRC
@@ -390,24 +391,21 @@ Use web mode instead of vue-mode
 	:init
  	(defun my-go-mode-hook ()
  		(setq gofmt-command "goimports")
- 		(add-hook 'before-save-hook 'gofmt-before-save) ; gofmt before every save
+ 		(add-hook 'before-save-hook 'gofmt-before-save)
  	)
  	(add-hook 'go-mode-hook 'my-go-mode-hook)
 )
-
-(require 'go-guru)
-(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
-
+;;Shows type information
+(use-package go-eldoc
+:ensure t)
+(add-hook 'go-mode-hook 'go-eldoc-setup)
 
 (use-package go-autocomplete
 :ensure t)
 
-(defun auto-complete-for-go ()
-(auto-complete-mode 1))
- (add-hook 'go-mode-hook 'auto-complete-for-go)
+;add-to-list 'load-path (concat (getenv "GOPATH")  "/src/github.com/golang/lint/misc/emacs"))
+;(require 'golint)
 
-(with-eval-after-load 'go-mode
-   (require 'go-autocomplete))
 #+END_SRC
 ** PHP
 #+BEGIN_SRC emacs-lisp
@@ -528,6 +526,26 @@ Highlights same symbols in current buffer
 
 * Other
 #+BEGIN_SRC emacs-lisp
+(evil-set-initial-state 'term-mode 'emacs)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+
+;; before loading new theme
+;;(defun load-theme--disable-old-theme(theme &rest args)
+;;  "Disable current theme before loading new one."
+;;  (mapcar #'disable-theme custom-enabled-themes))
+;;(advice-add 'load-theme :before #'load-theme--disable-old-theme)
+
+;; After loading new theme
+;;(defun load-theme--restore-line-numbering(theme &rest args)
+;;  "Set linum-format again after loading any theme."
+;;  (setq linum-format 'linum-format-func))
+;;(advice-add 'load-theme :after #'load-theme--restore-line-numbering)
+
+
+
+
 (defvar my-keys-minor-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-j") 'evil-window-down)
