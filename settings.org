@@ -171,6 +171,14 @@ Use web mode instead of vue-mode
     (use-package helm
     :ensure t)
    #+END_SRC
+   Fuzzy completion
+   #+BEGIN_SRC emacs-lisp
+    (use-package ivy
+    :ensure t
+    :init
+        (ivy-mode 1)
+    )
+   #+END_SRC
 ** Evil Mode
    Adds VIM keyindings
    #+BEGIN_SRC emacs-lisp
