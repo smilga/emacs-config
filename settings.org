@@ -1,348 +1,98 @@
 * Package management
 ** Add packages from sources
-Load packages from melpa
-#+BEGIN_SRC emacs-lisp
-(require 'package)
-(setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
-                          ("gnu" . "http://elpa.gnu.org/packages/")
-                          ("marmalade" . "http://marmalade-repo.org/packages/")))
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+   Load packages from melpa
+   #+BEGIN_SRC emacs-lisp
+    (require 'package)
+    (setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
+                            ("gnu" . "http://elpa.gnu.org/packages/")
+                            ("marmalade" . "http://marmalade-repo.org/packages/")))
+    (add-to-list 'package-archives
+                '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
-(package-initialize)
-(setq url-http-attempt-keepalives nil)
+    (package-initialize)
+    (setq url-http-attempt-keepalives nil)
 
-(require 'package)
-(setq pacakge-enable-at-startup nil)
-(add-to-list 'package-archives
-		'("melpa" . "https://melpa.org/packages/"))
+    (require 'package)
+    (setq pacakge-enable-at-startup nil)
+    (add-to-list 'package-archives
+            '("melpa" . "https://melpa.org/packages/"))
 
-(package-initialize)
-(when (not package-archive-contents)
-    (package-refresh-contents))
-
-#+END_SRC
+    (package-initialize)
+    (when (not package-archive-contents)
+        (package-refresh-contents))
+   #+END_SRC
 ** Package installation with "use package"
-Easy way to install package with use-package
-#+BEGIN_SRC emacs-lisp
-(unless (package-installed-p 'use-package)
-(package-refresh-contents)
-(package-install 'use-package))
-#+END_SRC
+   Easy way to install package with use-package
+   #+BEGIN_SRC emacs-lisp
+    (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+   #+END_SRC
 ** Package that allows to try another packages
-Use <M-x>try <RET> package name <RET> and try that package
-#+BEGIN_SRC emacs-lisp
-(use-package try
-:ensure t)
-#+END_SRC
+   Use <M-x>try <RET> package name <RET> and try that package
+   #+BEGIN_SRC emacs-lisp
+    (use-package try
+    :ensure t)
+   #+END_SRC
 ** Load paths
-#+BEGIN_SRC emacs-lisp
-(add-to-list 'load-path "~/.emacs.d/lisp/")
-;(require 'highlight-chars)
-;(add-hook 'font-lock-mode-hook 'hc-highlight-tabs)
-#+END_SRC
-* Visual
-** Theme
-Load themes from local folder
-#+BEGIN_SRC emacs-lisp
-(add-to-list 'load-path "~/.emacs.d/themes/")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+   #+BEGIN_SRC emacs-lisp
+    (add-to-list 'load-path "~/.emacs.d/lisp/")
+    ;(require 'highlight-chars)
+    ;(add-hook 'font-lock-mode-hook 'hc-highlight-tabs)
+   #+END_SRC
+* Settings
+** Themes
+   Load themes from local folder
+   #+BEGIN_SRC emacs-lisp
+    (add-to-list 'load-path "~/.emacs.d/themes/")
+    (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
-(use-package doom-themes
-:ensure t)
-(load-theme 'doom-vibrant t) ;load theme
-#+END_SRC
+    (use-package doom-themes
+    :ensure t)
+    (load-theme 'doom-vibrant t)
+   #+END_SRC
 ** Fonts
-#+BEGIN_SRC emacs-lisp
-;;Set fonts
-(set-default-font "Roboto Mono 10")
-;(set-face-attribute 'default nil :height 100)
-(setq-default line-spacing 3) 
-;(setq-default line-height '(64 64))
-#+END_SRC
-* Behavior
-#+BEGIN_SRC emacs-lisp
-(setq debug-on-error nil)
-(setq make-backup-files nil); stop creating backup~ files
-(setq auto-save-default nil); stop creating #autosave# files
-(set-default 'truncate-lines t); stop wraping lines
-(menu-bar-mode -1); disable menubar
-(toggle-scroll-bar -1); disable scrollbar
-(tool-bar-mode -1); disable toolbar 
-(setq inhibit-startup-message t); start with scratch buffer
-(setq-default tab-width 4); tab width
-(global-linum-mode t); show line numbers
-(show-paren-mode 1); show matching parenth
-(setq show-paren-delay 0); turn of matching delay
-;; use relative line numbers
-(use-package linum-relative
-	:ensure t
-	:config
-		(linum-relative-global-mode t)
-		(setq linum-relative-current-symbol "")
-)
-;; dired use only one buffer
-(put 'dired-find-alternate-file 'disabled nil)
-;; dired automaticly revert
-(add-hook 'dired-mode-hook 'auto-revert-mode)
-(global-auto-revert-mode 1)
-;;Turn off bells
-(setq ring-bell-function 'ignore)
-;;Customizations seperate file from init.el
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
-;;Use spaces instead of tabs
-(setq c-basic-indent 4)
-(setq tab-width 4)
-(setq-default indent-tabs-mode nil)
-;;Show
-;(setq-default show-trailing-whitespace t)
-;;C-U scroll top evil
-(setq evil-want-C-u-scroll t)
-#+END_SRC
-* TreeView
-#+BEGIN_SRC emacs-lisp
-(use-package neotree
-:ensure t
-:init
-(add-hook 'neotree-mode-hook
-			(lambda ()
-			(define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
-			(define-key evil-normal-state-local-map (kbd "SPC") 'neotree-quick-look)
-			(define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
-			(define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
-
-;;Custom funciton to open netoreee in project root folder
-(defun neotree-project-dir-toggle ()
-"Open NeoTree using the project root, using find-file-in-project, or the current buffer directory."
-(interactive)
-(let ((project-dir
-	(ignore-errors
-	;;; Pick one: projectile or find-file-in-project
-	(projectile-project-root)
-	;(ffip-project-root)
-	))
-	;(file-name (buffer-file-name))
-	)
-(if (and (fboundp 'neo-global--window-exists-p)
-		(neo-global--window-exists-p))
-	(neotree-hide)
-(progn
-	(neotree-show)
-	(if project-dir
-		(neotree-dir project-dir))
-	))))
-
-:config
- (setq
-  neo-autorefresh t
-  neo-theme 'ascii
-  neo-vc-integration '(face char))
-	(setq neo-force-change-root t)
-)
-(global-set-key (kbd "C-\\") #'neotree-project-dir-toggle)
-(custom-set-faces
- '(neo-vc-added-face ((t (:foreground "lime green"))))
- '(neo-vc-edited-face ((t (:foreground "gold"))))
-)
-
- ;(neo-theme (quote ascii))
-#+END_SRC
-* Autopair
-Automaticly close brackets
-#+BEGIN_SRC emacs-lisp
-(use-package autopair
-	:ensure t
-	:init
-	(autopair-global-mode t)
-)
-#+END_SRC
-* Projectile
-Project management tool
-#+BEGIN_SRC emacs-lisp
-(setq projectile-known-projects-file "~/.emacs.d/misc/projectile-bookmarks.eld")
-(use-package projectile
-	:ensure t
-	:init
-	(projectile-global-mode)
-)
-#+END_SRC
-* Searhcing
-#+BEGIN_SRC emacs-lisp
-(use-package helm
-:ensure t)
-
-(use-package helm-ag
-:ensure t)
-#+END_SRC
-* General keyindings
-Adds leader key
-#+BEGIN_SRC emacs-lisp
-(use-package general :ensure t
-	:config
-	(general-evil-setup t)
-	(general-define-key
-	:states '(normal emacs)
-	:prefix ","
-
-		"f" 'find-file :which-key "find file"
-		"w" 'save-buffer
-		"p" 'projectile-find-file
-
-		;;Buffer management
-		"l" 'switch-to-buffer
-		"k" 'kill-buffer
-
-		;;Searching
-		"ss" 'helm-do-ag-project-root
-		"sr" 'projectile-replace
-		"sd" 'helm-do-ag
-
-		;;Dired
-		"dd" 'dired
-		"du" 'dired-up-directory
-
-
-		;;Go to definition
-		"b" 'dumb-jump-back
-		"g" 'dumb-jump-go
-		"j" 'dumb-jump-quick-look
-
-		;;Go mode
-
-		;;JS import
-		"ii" 'js-import
-		"id" 'js-import-dev
-	)
-
-	(general-define-key 
-	:states '(normal emacs)
-	:keymaps 'go-mode-map
-	:prefix ","
-		"g" 'godef-jump
-	)
-)
-#+END_SRC
-* DumbJump
-Jump to definition package. Uses silversearch.
-#+BEGIN_SRC emacs-lisp
-(use-package dumb-jump
-  :config (setq dumb-jump-selector 'helm)
-  :ensure)
-#+END_SRC
-* Flycheck
-Syntax checker
-#+BEGIN_SRC emacs-lisp
-(use-package flycheck
-	:ensure t
-	:init
-	(global-flycheck-mode)
-	(setq flycheck-check-syntax-automatically '(mode-enabled save))
-	(setq-default flycheck-temp-prefix "~/.eslintrc")
-	:config
-	(setq
-	flycheck-disabled-checkers
-	(append flycheck-disabled-checkers
-		'(javascript-jshint))
-	)
-)
-(flycheck-add-mode 'javascript-eslint 'js2-mode)
-(flycheck-add-mode 'javascript-eslint 'web-mode)
-(flycheck-add-mode 'javascript-eslint 'vue-mode)
-(setq-default flycheck-disabled-checkers '(php-phpcs))
-#+END_SRC
-* Company
-Autocomplete package
-#+BEGIN_SRC emacs-lisp
-(use-package auto-complete
-  :ensure t
-  :init
-  (progn
-    (ac-config-default)
-    (global-auto-complete-mode t)
-	(setq ac-menu-height       20)
-	(setq ac-auto-start t)
-	(setq ac-use-comphist t)
-	(setq ac-ignore-case 0)
-	(setq ac-show-menu-immediately-on-auto-complete t)
-    ))
-#+END_SRC
-* Powerline
-(use-package powerline
-:ensure t)
-(powerline-default-theme)
-* Imenu-list
-Show list of all variables and mehtods in current file
-#+BEGIN_SRC emacs-lisp
-(use-package imenu-list
-:ensure t
-:config
-(setq imenu-list-auto-resize t)
-(setq imenu-list-focus-after-activation t)
-)
-(global-set-key (kbd "C-'") #'imenu-list-smart-toggle)
-#+END_SRC
-* Js import
-Script automaticly generates js import path
-#+BEGIN_SRC emacs-lisp
-#+END_SRC
-* Yasnippet
-#+BEGIN_SRC emacs-lisp
-(use-package yasnippet
-:ensure t
-:init
-(yas-global-mode 1)
-)
-
-(define-key yas-minor-mode-map (kbd "<C-SPC>") 'yas-expand)
-
-(use-package yasnippet-snippets
-:ensure t)
-
-(use-package php-auto-yasnippets
-:ensure t
-:config
-(payas/ac-setup)
-)
-#+END_SRC
-* Todo
-#+BEGIN_SRC emacs-lisp
-(use-package hl-todo
-:ensure t
-:init
-(global-hl-todo-mode t)
-)
-#+END_SRC
-* Highlight numbers
-#+BEGIN_SRC emacs-lisp
-(use-package highlight-numbers
-:ensure t
-:config
-(add-hook 'prog-mode-hook 'highlight-numbers-mode)
-)
-#+END_SRC
-* Magit
-(use-package magit
-:ensure t)
-
-(use-package evil-magit
-:ensure t
-:config
-(evil-magit-init)
-)
-* Js import
-#+BEGIN_SRC emacs-lisp
-(use-package js-import
-:ensure t)
-#+END_SRC
-* Rainbow-mode
-(define-globalized-minor-mode my-global-rainbow-mode rainbow-mode
-  (lambda () (rainbow-mode 1)))
-(use-package rainbow-mode
-:ensure t
-:init 
-(my-global-rainbow-mode 1)
-)
+   Set fonts, should download if not in system
+   #+BEGIN_SRC emacs-lisp
+    (set-default-font "Roboto Mono 10")
+    (setq-default line-spacing 3) 
+   #+END_SRC
+** Appearance and behavior
+   #+BEGIN_SRC emacs-lisp
+    (menu-bar-mode -1); disable menubar
+    (toggle-scroll-bar -1); disable scrollbar
+    (tool-bar-mode -1); disable toolbar 
+    (setq inhibit-startup-message t); start with scratch buffer
+    (setq-default tab-width 4); tab width
+    (global-linum-mode t); show line numbers
+    (show-paren-mode 1); show matching parenth
+    (setq show-paren-delay 0); turn of matching delay
+    ;; use relative line numbers
+    (use-package linum-relative
+        :ensure t
+        :config
+            (linum-relative-global-mode t)
+            (setq linum-relative-current-symbol "")
+    )
+    ;; dired use only one buffer
+    (put 'dired-find-alternate-file 'disabled nil)
+    ;; dired automaticly revert
+    (add-hook 'dired-mode-hook 'auto-revert-mode)
+    (global-auto-revert-mode 1)
+    ;;Turn off bells
+    (setq ring-bell-function 'ignore)
+    ;;Customizations seperate file from init.el
+    (setq custom-file "~/.emacs.d/custom.el")
+    (load custom-file)
+    ;;Use spaces instead of tabs
+    (setq c-basic-indent 4)
+    (setq tab-width 4)
+    (setq-default indent-tabs-mode nil)
+    ;;Show
+    ;(setq-default show-trailing-whitespace t)
+    ;;C-U scroll top evil
+    (setq evil-want-C-u-scroll t)
+   #+END_SRC
 * Major modes
 ** Javascript
 #+BEGIN_SRC emacs-lisp
@@ -415,232 +165,373 @@ Use web mode instead of vue-mode
 (setq exec-path (append exec-path '("/home/maxtraffic/.composer/vendor/bin")))
 #+END_SRC
 * Minor modes
+** Completion
+   Incremental completion in menus
+   #+BEGIN_SRC emacs-lisp
+    (use-package helm
+    :ensure t)
+   #+END_SRC
 ** Evil Mode
-Adds VIM keyindings
-#+BEGIN_SRC emacs-lisp
-(use-package evil
-  :ensure t
-  :init
-  (evil-mode 1)
-)
-#+END_SRC
+   Adds VIM keyindings
+   #+BEGIN_SRC emacs-lisp
+    (use-package evil
+    :ensure t
+    :init
+        (evil-mode 1)
+    )
+   #+END_SRC
+   Don`t use evil in terminal
+   #+BEGIN_SRC emacs-lisp
+    (evil-set-initial-state 'term-mode 'emacs)
+   #+END_SRC
+   Colorize cursor depending on mode
+   #+BEGIN_SRC emacs-lisp
+    (setq evil-emacs-state-cursor '("red" box))
+    (setq evil-normal-state-cursor '("green" box))
+    (setq evil-visual-state-cursor '("orange" box))
+    (setq evil-insert-state-cursor '("red" bar))
+    (setq evil-replace-state-cursor '("red" bar))
+    (setq evil-operator-state-cursor '("red" hollow))
+   #+END_SRC
 ** Emmet
-#+BEGIN_SRC emacs-lisp
-(use-package emmet-mode
-	:ensure t
-	:init
-	(add-hook 'vue-mode-hook 'emmet-mode)
-	(add-hook 'html-mode-hook 'emmet-mode)
-	(add-hook 'web-mode-hook 'emmet-mode)
-)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+    (use-package emmet-mode
+        :ensure t
+        :init
+        (add-hook 'vue-mode-hook 'emmet-mode)
+        (add-hook 'html-mode-hook 'emmet-mode)
+        (add-hook 'web-mode-hook 'emmet-mode)
+    )
+   #+END_SRC
 ** GitGutter
-#+BEGIN_SRC emacs-lisp
-(use-package git-gutter
-:ensure t
-:init
-	(global-git-gutter-mode)
-	;(custom-set-variables
-	;'(git-gutter:window-width 2)
-	;'(git-gutter:modified-sign "~")
-	;'(git-gutter:added-sign "+")
-	;'(git-gutter:deleted-sign "-"))
+   #+BEGIN_SRC emacs-lisp
+    (use-package git-gutter
+    :ensure t
+    :init
+        (global-git-gutter-mode)
+        ;(custom-set-variables
+        ;'(git-gutter:window-width 2)
+        ;'(git-gutter:modified-sign "~")
+        ;'(git-gutter:added-sign "+")
+        ;'(git-gutter:deleted-sign "-"))
 
-	;(set-face-background 'git-gutter:modified "none") ;; background color
-	(set-face-foreground 'git-gutter:added "green")
-	(set-face-foreground 'git-gutter:deleted "red")
-	(set-face-foreground 'git-gutter:modified "yellow")
-)
-#+END_SRC
+        ;(set-face-background 'git-gutter:modified "none") ;; background color
+        (set-face-foreground 'git-gutter:added "green")
+        (set-face-foreground 'git-gutter:deleted "red")
+        (set-face-foreground 'git-gutter:modified "yellow")
+    )
+   #+END_SRC
 ** Multiple cursors
-#+BEGIN_SRC emacs-lisp
-(use-package multiple-cursors
-:ensure t)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+    (use-package multiple-cursors
+    :ensure t)
+   #+END_SRC
 ** Rainbow delimitiers
-Colors pairs of brackets according to their depth
-#+BEGIN_SRC emacs-lisp
-(use-package rainbow-delimiters
-:ensure t
-:init
-(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-)
-#+END_SRC
+   Colors pairs of brackets according to their depth
+   #+BEGIN_SRC emacs-lisp
+    (use-package rainbow-delimiters
+    :ensure t
+    :init
+    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+    )
+   #+END_SRC
 ** Json mode
-#+BEGIN_SRC emacs-lisp
-(use-package json-mode
-:ensure t)
-#+END_SRC
-** SmartTab
-#+BEGIN_SRC emacs-lisp
-(use-package smart-tab
-:ensure t
-:init
-(global-smart-tab-mode 1)
-)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+    (use-package json-mode
+    :ensure t)
+   #+END_SRC
+** Rainbow mode
+   Colorize matching parenthesis in different colors
+   #+BEGIN_SRC emacs-lisp
+    (define-globalized-minor-mode my-global-rainbow-mode rainbow-mode
+    (lambda () (rainbow-mode 1)))
+    (use-package rainbow-mode
+    :ensure t
+    :init 
+        (my-global-rainbow-mode 1)
+    )
+   #+END_SRC
+** JS import
+   Import js modules in file
+   #+BEGIN_SRC emacs-lisp
+    (use-package js-import
+    :ensure t)
+   #+END_SRC
+** Commentary
+   Evil commentary use gcc to comment or uncommnt
+   #+BEGIN_SRC emacs-lisp
+    (use-package evil-commentary
+    :ensure t
+    :init
+    (evil-commentary-mode t)
+    )
+   #+END_SRC
+** Highlight symbol
+   Highlights same symbols in current buffer
+   #+BEGIN_SRC emacs-lisp
+    (use-package auto-highlight-symbol
+    :ensure t
+    :init
+        (auto-highlight-symbol-mode 1)
+    )
+   #+END_SRC
+** Magit
+   Git integration in emacs
+   #+BEGIN_SRC emasc-lisp
+    (use-package magit
+    :ensure t)
+   #+END_SRC
+   Evil integration with magit
+   #+BEGIN_SRC emasc-lisp
+    (use-package evil-magit
+    :ensure t
+    :config
+        (evil-magit-init)
+    )
+   #+END_SRC
+** Align block
+   #+BEGIN_SRC emacs-lisp
+    (use-package evil-lion
+    :ensure t
+    :bind (:map evil-normal-state-map
+            ("g l " . evil-lion-left)
+            ("g L " . evil-lion-right)
+            :map evil-visual-state-map
+            ("g l " . evil-lion-left)
+            ("g L " . evil-lion-right))
+    :config
+    (evil-lion-mode))
+   #+END_SRC
+** Redis console
+   Open redis-cli in emacs
+   #+BEGIN_SRC emacs-lisp
+    (use-package redis
+    :ensure t)
+   #+END_SRC
+** Highlight numbers
+   Highlight numbers in code
+   #+BEGIN_SRC emacs-lisp
+    (use-package highlight-numbers
+    :ensure t
+    :config
+        (add-hook 'prog-mode-hook 'highlight-numbers-mode)
+    )
+   #+END_SRC
+** Snippets
+   //TODO needs more configuration
+   Complete snippets
+   #+BEGIN_SRC emacs-lisp
+    (use-package yasnippet
+    :ensure t
+    :init
+        (yas-global-mode 1)
+    )
+   #+END_SRC
+   Define keybinding
+   #+BEGIN_SRC emacs-lisp
+    (define-key yas-minor-mode-map (kbd "<C-SPC>") 'yas-expand)
+   #+END_SRC
+** Power line
+   Vim style power line
+   #+BEGIN_SRC emacs-lisp
+    (use-package powerline
+    :ensure t)
+    (powerline-default-theme)
+   #+END_SRC
+** Autopair
+   Automaticly close brackets
+   #+BEGIN_SRC emacs-lisp
+    (use-package autopair
+        :ensure t
+        :init
+        (autopair-global-mode t)
+    )
+   #+END_SRC
+** TreeView
+   #+BEGIN_SRC emacs-lisp
+    (use-package neotree
+    :ensure t
+    :init
+        (add-hook 'neotree-mode-hook
+                    (lambda ()
+                    (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+                    (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-quick-look)
+                    (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
+                    (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
 
-* Commentary
-Evil commentary use gcc to comment or uncommnt
-#+BEGIN_SRC emacs-lisp
-(use-package evil-commentary
-:ensure t
-:init
-(evil-commentary-mode t)
-)
-#+END_SRC
-* Auto highlight symbol
-Highlights same symbols in current buffer
-#+BEGIN_SRC emacs-lisp
-(use-package auto-highlight-symbol
-:ensure t
-:init
-(auto-highlight-symbol-mode 1)
-)
-#+END_SRC
-* Magit
-#+BEGIN_SRC emasc-lisp
-(use-package magit
-:ensure t)
-(use-package evil-magit
-:ensure t)
-#+END_SRC
-* Align
-#+BEGIN_SRC emacs-lisp
-(use-package evil-lion
-  :ensure t
-  :bind (:map evil-normal-state-map
-         ("g l " . evil-lion-left)
-         ("g L " . evil-lion-right)
-         :map evil-visual-state-map
-         ("g l " . evil-lion-left)
-         ("g L " . evil-lion-right))
-  :config
-  (evil-lion-mode))
-#+END_SRC
-* Redis
-#+BEGIN_SRC emacs-lisp
-(use-package redis
-:ensure t)
-#+END_SRC
+    ;;Custom funciton to open netoreee in project root folder
+    (defun neotree-project-dir-toggle ()
+    "Open NeoTree using the project root, using find-file-in-project, or the current buffer directory."
+    (interactive)
+    (let ((project-dir
+        (ignore-errors
+        ;;; Pick one: projectile or find-file-in-project
+        (projectile-project-root)
+        ;(ffip-project-root)
+        ))
+        ;(file-name (buffer-file-name))
+        )
+    (if (and (fboundp 'neo-global--window-exists-p)
+            (neo-global--window-exists-p))
+        (neotree-hide)
+    (progn
+        (neotree-show)
+        (if project-dir
+            (neotree-dir project-dir))
+        ))))
 
-* Other
-#+BEGIN_SRC emacs-lisp
-(evil-set-initial-state 'term-mode 'emacs)
-#+END_SRC
+    :config
+    (setq
+    neo-autorefresh t
+    neo-theme 'ascii
+    neo-vc-integration '(face char))
+        (setq neo-force-change-root t)
+    )
+    (global-set-key (kbd "C-\\") #'neotree-project-dir-toggle)
+    (custom-set-faces
+    '(neo-vc-added-face ((t (:foreground "lime green"))))
+    '(neo-vc-edited-face ((t (:foreground "gold"))))
+    )
 
-#+BEGIN_SRC emacs-lisp
+    ;(neo-theme (quote ascii))
+   #+END_SRC
+** Flycheck
+   Syntax checker
+   #+BEGIN_SRC emacs-lisp
+    (use-package flycheck
+        :ensure t
+        :init
+        (global-flycheck-mode)
+        (setq flycheck-check-syntax-automatically '(mode-enabled save))
+        (setq-default flycheck-temp-prefix "~/.eslintrc")
+        :config
+        (setq
+        flycheck-disabled-checkers
+        (append flycheck-disabled-checkers
+            '(javascript-jshint))
+        )
+    )
+    (flycheck-add-mode 'javascript-eslint 'js2-mode)
+    (flycheck-add-mode 'javascript-eslint 'web-mode)
+    (flycheck-add-mode 'javascript-eslint 'vue-mode)
+    (setq-default flycheck-disabled-checkers '(php-phpcs))
+   #+END_SRC
+** Jump to definition
+   Jump to definition package
+   #+BEGIN_SRC emacs-lisp
+    (use-package dumb-jump
+        :config (setq dumb-jump-selector 'helm)
+    :ensure)
+   #+END_SRC
+** Projectile
+   Project management tool
+   #+BEGIN_SRC emacs-lisp
+    (setq projectile-known-projects-file "~/.emacs.d/misc/projectile-bookmarks.eld")
+    (use-package projectile
+        :ensure t
+        :init
+        (projectile-global-mode)
+    )
+   #+END_SRC
+** Searching
+   Silversearch interface for helm
+   Install silversearch before
+    https://github.com/ggreer/the_silver_searcher
+   #+BEGIN_SRC emacs-lisp
+    (use-package helm-ag
+    :ensure t)
+   #+END_SRC
+** Autocomplete
+   Autocomplete package
+   #+BEGIN_SRC emacs-lisp
+    (use-package auto-complete
+    :ensure t
+    :init
+    (progn
+        (ac-config-default)
+        (global-auto-complete-mode t)
+        (setq ac-menu-height       20)
+        (setq ac-auto-start t)
+        (setq ac-use-comphist t)
+        (setq ac-ignore-case 0)
+        (setq ac-show-menu-immediately-on-auto-complete t)
+        ))
+   #+END_SRC
+** Vim style leader key
+   Use leader key
+   #+BEGIN_SRC emacs-lisp
+    (use-package general :ensure t
+        :config
+        (general-evil-setup t)
+        (general-define-key
+        :states '(normal emacs)
+        :prefix ","
 
-;; before loading new theme
-;;(defun load-theme--disable-old-theme(theme &rest args)
-;;  "Disable current theme before loading new one."
-;;  (mapcar #'disable-theme custom-enabled-themes))
-;;(advice-add 'load-theme :before #'load-theme--disable-old-theme)
+            "f" 'find-file :which-key "find file"
+            "w" 'save-buffer
+            "p" 'projectile-find-file
 
-;; After loading new theme
-;;(defun load-theme--restore-line-numbering(theme &rest args)
-;;  "Set linum-format again after loading any theme."
-;;  (setq linum-format 'linum-format-func))
-;;(advice-add 'load-theme :after #'load-theme--restore-line-numbering)
+            ;;Buffer management
+            "l" 'switch-to-buffer
+            "k" 'kill-buffer
 
+            ;;Searching
+            "ss" 'helm-do-ag-project-root
+            "sr" 'projectile-replace
+            "sd" 'helm-do-ag
 
+            ;;Dired
+            "dd" 'dired
+            "du" 'dired-up-directory
 
+            ;;Go to definition
+            "b" 'dumb-jump-back
+            "g" 'dumb-jump-go
+            "j" 'dumb-jump-quick-look
 
-(defvar my-keys-minor-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-j") 'evil-window-down)
-    (define-key map (kbd "C-k") 'evil-window-up)
-    (define-key map (kbd "C-h") 'evil-window-left)
-    (define-key map (kbd "C-l") 'evil-window-right)
-	(global-set-key (kbd "C-n") 'mc/mark-next-like-this)
-    map)
-  "my-keys-minor-mode keymap.")
+            ;;JS import
+            "ii" 'js-import
+            "id" 'js-import-dev
+        )
 
-(define-minor-mode my-keys-minor-mode
-  "A minor mode so that my key settings override annoying major modes."
-  :init-value t
-  :lighter " my-keys")
+        (general-define-key 
+        :states '(normal emacs)
+        :keymaps 'go-mode-map
+        :prefix ","
+            "g" 'godef-jump
+        )
+    )
+   #+END_SRC
+** Show keys
+   Shows shows shortkeys after <C-x> is pressed
+   #+BEGIN_SRC emacs-lisp
+    (use-package which-key
+    :ensure t
+    :config (which-key-mode))
+   #+END_SRC
+* Custom definitions
+  Override keys with custom bindings
+  #+BEGIN_SRC emacs-lisp
+    (defvar my-keys-minor-mode-map
+    (let ((map (make-sparse-keymap)))
+        (define-key map (kbd "C-j") 'evil-window-down)
+        (define-key map (kbd "C-k") 'evil-window-up)
+        (define-key map (kbd "C-h") 'evil-window-left)
+        (define-key map (kbd "C-l") 'evil-window-right)
+        map)
+    "my-keys-minor-mode keymap.")
 
-(my-keys-minor-mode 1)
-#+END_SRC
+    (define-minor-mode my-keys-minor-mode
+    :init-value t
+    :lighter " my-keys")
 
-#+BEGIN_SRC emacs-lisp
-;;Colorize cursor depending on mode
-(setq evil-emacs-state-cursor '("red" box))
-(setq evil-normal-state-cursor '("green" box))
-(setq evil-visual-state-cursor '("orange" box))
-(setq evil-insert-state-cursor '("red" bar))
-(setq evil-replace-state-cursor '("red" bar))
-(setq evil-operator-state-cursor '("red" hollow))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-;; esc quits
-(define-key key-translation-map (kbd "ESC") (kbd "C-g"))
-
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
-(use-package powerline
-:ensure t
-;:config
-;(powerline-evil-vim-color-theme)
-;(display-time-mode t)
-)
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
-
-;;Package that shows shows shortkeys after <C-x> is pressed
-(use-package which-key
-  :ensure t
-  :config (which-key-mode))
-
-
-;;Enables mode that shows buffers
-;(setq indo-enable-flex-matching t)
-;(setq ido-everywhere t)
-;(ido-mode 1)
-
-;;Opens buffer list
-(defalias 'list-buffers 'ibuffer)
-
-;;For swiper to use <C-x><C-f>
-
-(use-package counsel
-  :ensure t
-)
-
-;;Better searching in file with <C-s>
-(use-package swiper
-  :ensure t
-  :config
-  (progn
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t)
-    (setq enable-recursive-minibuffers t)
-    (global-set-key "\C-s" 'swiper)
-    (global-set-key (kbd "C-c C-r") 'ivy-resume)
-    (global-set-key (kbd "<f6>") 'ivy-resume)
-    (global-set-key (kbd "M-x") 'counsel-M-x)
-    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-    (global-set-key (kbd "<f1> l") 'counsel-find-library)
-    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-    (global-set-key (kbd "C-c g") 'counsel-git)
-    (global-set-key (kbd "C-c j") 'counsel-git-grep)
-    (global-set-key (kbd "C-c k") 'counsel-ag)
-    (global-set-key (kbd "C-x l") 'counsel-locate)
-    (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
-    ))
-
-
-
-;;Themes
-;(use-package color-theme
-;  :ensure t)
-
-#+END_SRC
-
-
+    (my-keys-minor-mode 1)
+  #+END_SRC
+  ESC quits
+  #+BEGIN_SRC emacs-lisp
+   (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
+  #+END_SRC
+  Opens buffer list
+  #+BEGIN_SRC emacs-lisp
+   (defalias 'list-buffers 'ibuffer)
+  #+END_SRC
