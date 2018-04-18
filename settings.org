@@ -92,6 +92,7 @@
     ;(setq-default show-trailing-whitespace t)
     ;;C-U scroll top evil
     (setq evil-want-C-u-scroll t)
+    (set-default 'truncate-lines t); Stop wrap lines
    #+END_SRC
 * Major modes
 ** Javascript
@@ -130,6 +131,8 @@ Use web mode instead of vue-mode
 (add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.blade.php\\'" . web-mode))
 )
+(setq web-mode-script-padding 4)
+(setq web-mode-style-padding 4)
 #+END_SRC
 ** Golang
 #+BEGIN_SRC emacs-lisp
@@ -516,6 +519,17 @@ Use web mode instead of vue-mode
     (use-package which-key
     :ensure t
     :config (which-key-mode))
+   #+END_SRC
+** Show whitesapaces
+   Show whitsapce characters
+   #+BEGIN_SRC emacs-lisp
+    (require 'whitespace)
+    (global-whitespace-mode t)
+   #+END_SRC
+   Configure what to show
+   #+BEGIN_SRC emacs-lisp
+    (setq whitespace-style
+    '(face empty lines-tail tabs tab-mark trailing))
    #+END_SRC
 * Custom definitions
   Override keys with custom bindings
