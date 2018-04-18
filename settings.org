@@ -526,8 +526,9 @@ Use web mode instead of vue-mode
     (require 'whitespace)
     (global-whitespace-mode t)
    #+END_SRC
-   Configure what to show
+   Configure
    #+BEGIN_SRC emacs-lisp
+    (setq whitespace-global-modes '(not go-mode))
     (setq whitespace-style
     '(face empty lines-tail tabs tab-mark trailing))
    #+END_SRC
