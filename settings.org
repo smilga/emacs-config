@@ -93,6 +93,8 @@
     ;;C-U scroll top evil
     (setq evil-want-C-u-scroll t)
     (set-default 'truncate-lines t); Stop wrap lines
+    (setq web-mode-script-padding 4)
+    (setq web-mode-style-padding 4)
    #+END_SRC
 * Major modes
 ** Javascript
@@ -131,8 +133,6 @@ Use web mode instead of vue-mode
 (add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.blade.php\\'" . web-mode))
 )
-(setq web-mode-script-padding 4)
-(setq web-mode-style-padding 4)
 #+END_SRC
 ** Golang
 #+BEGIN_SRC emacs-lisp
