@@ -11,3 +11,5 @@ settings.el
 desktops
 projectile-bookmarks.eld
 network-security.data
+.emacs.desktop
+.emacs.desktop.lock

@@ -96,6 +96,11 @@
     (setq web-mode-script-padding 4)
     (setq web-mode-style-padding 4)
    #+END_SRC
+   Backup files
+   #+BEGIN_SRC emacs-lisp
+    (setq make-backup-files nil)
+    ;(setq backup-directory-alist `(("." . "~/.emacs.d/.saves")))
+   #+END_SRC
 * Major modes
 ** Javascript
 #+BEGIN_SRC emacs-lisp
