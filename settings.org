@@ -159,9 +159,6 @@ Use web mode instead of vue-mode
 :ensure t)
 (add-hook 'go-mode-hook 'go-eldoc-setup)
 
-(use-package go-autocomplete
-:ensure t)
-
 ;add-to-list 'load-path (concat (getenv "GOPATH")  "/src/github.com/golang/lint/misc/emacs"))
 ;(require 'golint)
 
@@ -561,6 +558,23 @@ Use web mode instead of vue-mode
     (setq whitespace-global-modes '(not go-mode))
     (setq whitespace-style
     '(face empty tabs tab-mark trailing))
+   #+END_SRC
+** Jump match
+   Jump with '%' between tag pairs
+   #+BEGIN_SRC emacs-lisp
+    (use-package evil-matchit
+    :ensure t
+    :config
+        (global-evil-matchit-mode 1)
+    )
+   #+END_SRC
+** Change suround
+   #+BEGIN_SRC emacs-lisp
+    (use-package evil-surround
+    :ensure t
+    :config
+        (global-evil-surround-mode 1)
+    )
    #+END_SRC
 * Custom definitions
   Override keys with custom bindings
