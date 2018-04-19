@@ -55,13 +55,14 @@
    Set fonts, should download if not in system
    #+BEGIN_SRC emacs-lisp
     (set-default-font "Roboto Mono 10")
-    (setq-default line-spacing 3) 
+    (setq-default line-spacing 3)
    #+END_SRC
 ** Appearance and behavior
    #+BEGIN_SRC emacs-lisp
+    (which-function-mode 1); shows in which function you are
     (menu-bar-mode -1); disable menubar
     (toggle-scroll-bar -1); disable scrollbar
-    (tool-bar-mode -1); disable toolbar 
+    (tool-bar-mode -1); disable toolbar
     (setq inhibit-startup-message t); start with scratch buffer
     (setq-default tab-width 4); tab width
     (global-linum-mode t); show line numbers
@@ -460,18 +461,42 @@ Use web mode instead of vue-mode
 ** Autocomplete
    Autocomplete package
    #+BEGIN_SRC emacs-lisp
-    (use-package auto-complete
+    (use-package company
     :ensure t
     :init
-    (progn
-        (ac-config-default)
-        (global-auto-complete-mode t)
-        (setq ac-menu-height       20)
-        (setq ac-auto-start t)
-        (setq ac-use-comphist t)
-        (setq ac-ignore-case 0)
-        (setq ac-show-menu-immediately-on-auto-complete t)
-        ))
+        (add-hook 'after-init-hook 'global-company-mode)
+    )
+
+    (setq company-idle-delay .3)
+    (setq company-echo-delay 0)
+   #+END_SRC
+   Sort autocomplete results by most used
+   #+BEGIN_SRC emacs-lisp
+    (use-package company-statistics
+    :ensure t
+    :init
+        (add-hook 'after-init-hook 'company-statistics-mode)
+    )
+   #+END_SRC
+   Web mode for autocomplete
+   #+BEGIN_SRC emacs-lisp
+    (use-package company-web
+    :ensure t
+    :init
+    (add-hook 'web-mode-hook (lambda ()
+                            (set (make-local-variable 'company-backends) '(company-web-html))
+                            (company-mode t)))
+    )
+   #+END_SRC
+   Go mode for autocomplete
+   #+BEGIN_SRC emacs-lisp
+    (use-package company-go
+    :ensure t
+    :init
+    (add-hook 'go-mode-hook (lambda ()
+                            (set (make-local-variable 'company-backends) '(company-go))
+                            (company-mode)))
+    )
    #+END_SRC
 ** Vim style leader key
    Use leader key
