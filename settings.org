@@ -225,11 +225,11 @@ Use web mode instead of vue-mode
     :ensure t
     :init
         (global-git-gutter-mode)
-        ;(custom-set-variables
-        ;'(git-gutter:window-width 2)
-        ;'(git-gutter:modified-sign "~")
-        ;'(git-gutter:added-sign "+")
-        ;'(git-gutter:deleted-sign "-"))
+        (custom-set-variables
+        '(git-gutter:window-width 1)
+        '(git-gutter:modified-sign "|")
+        '(git-gutter:added-sign "|")
+        '(git-gutter:deleted-sign "|"))
 
         ;(set-face-background 'git-gutter:modified "none") ;; background color
         (set-face-foreground 'git-gutter:added "green")
@@ -535,7 +535,7 @@ Use web mode instead of vue-mode
    #+BEGIN_SRC emacs-lisp
     (setq whitespace-global-modes '(not go-mode))
     (setq whitespace-style
-    '(face empty lines-tail tabs tab-mark trailing))
+    '(face empty tabs tab-mark trailing))
    #+END_SRC
 * Custom definitions
   Override keys with custom bindings
