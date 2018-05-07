@@ -3,21 +3,19 @@
    Load packages from melpa
    #+BEGIN_SRC emacs-lisp
     (require 'package)
-    (setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
-                            ("gnu" . "http://elpa.gnu.org/packages/")
-                            ("marmalade" . "http://marmalade-repo.org/packages/")))
-    (add-to-list 'package-archives
-                '("melpa" . "http://melpa.milkbox.net/packages/") t)
+    (setq package-enable-at-startup nil)
+    (mapc (lambda(p) (add-to-list 'package-archives p t))
+        '(("marmalade" . "http://marmalade-repo.org/packages/")
+            ("melpa" . "http://melpa.org/packages/")
+            ("org" . "http://orgmode.org/elpa/")))
 
     (package-initialize)
-    (setq url-http-attempt-keepalives nil)
+    (unless (package-installed-p 'use-package)
+        (package-refresh-contents)
+        (package-install 'use-package))
 
-    (require 'package)
-    (setq pacakge-enable-at-startup nil)
-    (add-to-list 'package-archives
-            '("melpa" . "https://melpa.org/packages/"))
+    (require 'use-package)
 
-    (package-initialize)
     (when (not package-archive-contents)
         (package-refresh-contents))
    #+END_SRC
@@ -50,6 +48,17 @@
     (use-package doom-themes
     :ensure t)
     (load-theme 'doom-vibrant t)
+
+    (use-package autumn-light-theme
+    :ensure t)
+
+    (use-package theme-changer
+    :ensure t
+    :config
+        (setq calendar-latitude 56.94)
+        (setq calendar-longitude 24.10)
+        (change-theme 'autumn-light 'doom-vibrant)
+    )
    #+END_SRC
 ** Fonts
    Set fonts, should download if not in system
@@ -617,3 +626,5 @@ Use web mode instead of vue-mode
         (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
    #+END_SRC
 
+*** Check out these packages
+    - https://github.com/ShingoFukuyama/helm-swoop
