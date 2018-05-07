@@ -206,6 +206,7 @@ Use web mode instead of vue-mode
    Don`t use evil in terminal
    #+BEGIN_SRC emacs-lisp
     (evil-set-initial-state 'term-mode 'emacs)
+    (evil-set-initial-state 'sx-tab 'emacs)
    #+END_SRC
    Colorize cursor depending on mode
    #+BEGIN_SRC emacs-lisp
@@ -606,6 +607,18 @@ Use web mode instead of vue-mode
         (flx-ido-mode 1)
     )
    #+END_SRC
+** OS integration
+   Syste monitor
+   #+BEGIN_SRC emacs-lisp
+    (use-package symon
+    :ensure t
+    :config
+        (symon-mode 1)
+        (setq symon-sparkline-type 'boxed)
+        (setq symon-sparkline-width '200)
+    )
+   #+END_SRC
+
 * Custom definitions
   Override keys with custom bindings
   #+BEGIN_SRC emacs-lisp
