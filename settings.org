@@ -19,7 +19,7 @@
     (when (not package-archive-contents)
         (package-refresh-contents))
    #+END_SRC
-** Package installation with "use package"
+** Package installation with "use package"         
    Easy way to install package with use-package
    #+BEGIN_SRC emacs-lisp
     (unless (package-installed-p 'use-package)
@@ -357,9 +357,22 @@ Use web mode instead of vue-mode
 ** Power line
    Vim style power line
    #+BEGIN_SRC emacs-lisp
-    (use-package powerline
-    :ensure t)
-    (powerline-default-theme)
+    (use-package telephone-line
+    :ensure t
+        :config
+        (telephone-line-mode t)
+        (setq telephone-line-lhs
+            '((evil   . (telephone-line-evil-tag-segment))
+                (accent . (telephone-line-vc-segment
+                        telephone-line-erc-modified-channels-segment
+                        telephone-line-process-segment))
+                (nil    . (telephone-line-minor-mode-segment
+                        telephone-line-buffer-segment))))
+        (setq telephone-line-rhs
+            '((nil    . (telephone-line-misc-info-segment))
+                (accent . (telephone-line-major-mode-segment))
+                (evil   . (telephone-line-airline-position-segment))))
+    )
    #+END_SRC
 ** Autopair
    Automaticly close brackets
@@ -583,6 +596,14 @@ Use web mode instead of vue-mode
     :ensure t
     :config
         (global-evil-surround-mode 1)
+    )
+   #+END_SRC
+** Fuzzy matching
+   #+BEGIN_SRC emacs-lisp
+    (use-package flx-ido
+    :ensure t
+    :init
+        (flx-ido-mode 1)
     )
    #+END_SRC
 * Custom definitions
