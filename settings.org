@@ -19,7 +19,7 @@
     (when (not package-archive-contents)
         (package-refresh-contents))
    #+END_SRC
-** Package installation with "use package"         
+** Package installation with "use package"
    Easy way to install package with use-package
    #+BEGIN_SRC emacs-lisp
     (unless (package-installed-p 'use-package)

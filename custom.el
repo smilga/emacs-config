@@ -9,7 +9,7 @@
  '(company-quickhelp-color-foreground "#232333")
  '(custom-safe-themes
    (quote
-    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "55ed02951e7b458e4cd18837eefa1956884c9afd22bb514f697fd1d2d1abb3d3" "bea5fd3610ed135e6ecc35bf8a9c27277d50336455dbdd2969809f7d7c1f7d79" "ef1e992ef341e86397b39ee6b41c1368e1b33d45b0848feac6a8e8d5753daa67" "bbea3143fe920d2738e73a042d1edcc0e0c1e9726a757dc0b51ca8d5ee825255" "53d1bb57dadafbdebb5fbd1a57c2d53d2b4db617f3e0e05849e78a4f78df3a1b" "c5d320f0b5b354b2be511882fc90def1d32ac5d38cccc8c68eab60a62d1621f2" "4e21fb654406f11ab2a628c47c1cbe53bab645d32f2c807ee2295436f09103c6" "a866134130e4393c0cad0b4f1a5b0dd580584d9cf921617eee3fd54b6f09ac37" "bd23e5e571f9b951eb79941ba3927fb493c26463654add2a53f4fb0de72ef08b" "55d31108a7dc4a268a1432cd60a7558824223684afecefa6fae327212c40f8d3" "1884b12dbfa952664f1119bd6d89aaee77b35fbe3c3539381fbdc84a5bd907ef" default)))
+    ("013c62a1fcee7c8988c831027b1c38ae215f99722911b69e570f21fc19cb662e" "4597d1e9bbf1db2c11d7cf9a70204fa42ffc603a2ba5d80c504ca07b3e903770" "08f5da7e1f5064a2917af94f0dab946adfb25665b25450168ded749ec78a1145" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "55ed02951e7b458e4cd18837eefa1956884c9afd22bb514f697fd1d2d1abb3d3" "bea5fd3610ed135e6ecc35bf8a9c27277d50336455dbdd2969809f7d7c1f7d79" "ef1e992ef341e86397b39ee6b41c1368e1b33d45b0848feac6a8e8d5753daa67" "bbea3143fe920d2738e73a042d1edcc0e0c1e9726a757dc0b51ca8d5ee825255" "53d1bb57dadafbdebb5fbd1a57c2d53d2b4db617f3e0e05849e78a4f78df3a1b" "c5d320f0b5b354b2be511882fc90def1d32ac5d38cccc8c68eab60a62d1621f2" "4e21fb654406f11ab2a628c47c1cbe53bab645d32f2c807ee2295436f09103c6" "a866134130e4393c0cad0b4f1a5b0dd580584d9cf921617eee3fd54b6f09ac37" "bd23e5e571f9b951eb79941ba3927fb493c26463654add2a53f4fb0de72ef08b" "55d31108a7dc4a268a1432cd60a7558824223684afecefa6fae327212c40f8d3" "1884b12dbfa952664f1119bd6d89aaee77b35fbe3c3539381fbdc84a5bd907ef" default)))
  '(fci-rule-color "#5c5e5e")
  '(flx-ido-mode t)
  '(git-gutter:added-sign "|")
@@ -60,5 +60,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(js2-external-variable ((t (:foreground "dark orange"))))
+ '(js2-warning ((t (:underline "dark orange"))))
  '(neo-vc-added-face ((t (:foreground "lime green"))))
- '(neo-vc-edited-face ((t (:foreground "gold")))))
+ '(neo-vc-edited-face ((t (:foreground "gold"))))
+ '(telephone-line-evil ((t (:inherit mode-line-evil :foreground "white" :weight bold))))
+ '(telephone-line-evil-insert ((t (:inherit telephone-line-evil :background "lawn green"))))
+ '(telephone-line-evil-normal ((t (:inherit telephone-line-evil :background "deep sky blue")))))
