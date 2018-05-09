@@ -239,10 +239,12 @@ Use web mode instead of vue-mode
         '(git-gutter:added-sign "|")
         '(git-gutter:deleted-sign "|"))
 
-        ;(set-face-background 'git-gutter:modified "none") ;; background color
-        (set-face-foreground 'git-gutter:added "green")
-        (set-face-foreground 'git-gutter:deleted "red")
-        (set-face-foreground 'git-gutter:modified "yellow")
+        (set-face-foreground 'git-gutter:added "#6fc954")
+        (set-face-background 'git-gutter:added "#6fc954")
+        (set-face-background 'git-gutter:deleted "#f6546a")
+        (set-face-foreground 'git-gutter:deleted "#f6546a")
+        (set-face-background 'git-gutter:modified "#fef65b")
+        (set-face-foreground 'git-gutter:modified "#fef65b")
     )
    #+END_SRC
 ** Multiple cursors
