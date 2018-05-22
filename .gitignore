@@ -7,6 +7,7 @@
 .mc-lists.el
 /recentf
 /misc
+session.*
 settings.el
 desktops
 projectile-bookmarks.eld

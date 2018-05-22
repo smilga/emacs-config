@@ -26,7 +26,7 @@
     ("#336c6c" "#205070" "#0f2050" "#806080" "#401440" "#6c1f1c" "#6b400c" "#23733c")))
  '(package-selected-packages
    (quote
-    (symon telephone-line flx-ido autumn-light-theme theme-changer evil-magit magit evil-surround evil-matchit evil-mathcit company-go company-statistics company-web company-web-html company company-mode ivy rainbow-mode php-mode counsel which-key powerline redis evil-lion auto-highlight-symbol evil-commentary smart-tab json-mode rainbow-delimiters multiple-cursors git-gutter emmet-mode evil go-autocomplete go-eldoc go-mode exec-path-from-shell web-mode js2-mode js-import highlight-numbers hl-todo php-auto-yasnippets yasnippet-snippets yasnippet imenu-list auto-complete flycheck dumb-jump general helm-ag helm projectile autopair neotree linum-relative use-package try doom-themes)))
+    (engine-mode symon telephone-line flx-ido autumn-light-theme theme-changer evil-magit magit evil-surround evil-matchit evil-mathcit company-go company-statistics company-web company-web-html company company-mode ivy rainbow-mode php-mode counsel which-key powerline redis evil-lion auto-highlight-symbol evil-commentary smart-tab json-mode rainbow-delimiters multiple-cursors git-gutter emmet-mode evil go-autocomplete go-eldoc go-mode exec-path-from-shell web-mode js2-mode js-import highlight-numbers hl-todo php-auto-yasnippets yasnippet-snippets yasnippet imenu-list auto-complete flycheck dumb-jump general helm-ag helm projectile autopair neotree linum-relative use-package try doom-themes)))
  '(pdf-view-midnight-colors (quote ("#232333" . "#c7c7c7")))
  '(sml/active-background-color "#98ece8")
  '(sml/active-foreground-color "#424242")

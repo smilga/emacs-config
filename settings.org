@@ -44,6 +44,7 @@
    #+BEGIN_SRC emacs-lisp
     (add-to-list 'load-path "~/.emacs.d/themes/")
     (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+    (load-theme 'monokai t)
 
     (use-package doom-themes
     :ensure t)
@@ -388,51 +389,15 @@ Use web mode instead of vue-mode
    #+END_SRC
 ** TreeView
    #+BEGIN_SRC emacs-lisp
-    (use-package neotree
+
+    (use-package dired-sidebar
     :ensure t
-    :init
-        (add-hook 'neotree-mode-hook
-                    (lambda ()
-                    (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
-                    (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-quick-look)
-                    (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
-                    (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
-
-    ;;Custom funciton to open netoreee in project root folder
-    (defun neotree-project-dir-toggle ()
-    "Open NeoTree using the project root, using find-file-in-project, or the current buffer directory."
-    (interactive)
-    (let ((project-dir
-        (ignore-errors
-        ;;; Pick one: projectile or find-file-in-project
-        (projectile-project-root)
-        ;(ffip-project-root)
-        ))
-        ;(file-name (buffer-file-name))
-        )
-    (if (and (fboundp 'neo-global--window-exists-p)
-            (neo-global--window-exists-p))
-        (neotree-hide)
-    (progn
-        (neotree-show)
-        (if project-dir
-            (neotree-dir project-dir))
-        ))))
-
+    :commands (dired-sidebar-toggle-sidebar)
     :config
-    (setq
-    neo-autorefresh t
-    neo-theme 'ascii
-    neo-vc-integration '(face char))
-        (setq neo-force-change-root t)
-    )
-    (global-set-key (kbd "C-\\") #'neotree-project-dir-toggle)
-    (custom-set-faces
-    '(neo-vc-added-face ((t (:foreground "lime green"))))
-    '(neo-vc-edited-face ((t (:foreground "gold"))))
+        (setq dired-sidebar-theme 'nerd)
     )
 
-    ;(neo-theme (quote ascii))
+    (global-set-key (kbd "C-\\") #'dired-sidebar-toggle-sidebar)
    #+END_SRC
 ** Flycheck
    Syntax checker
@@ -621,6 +586,16 @@ Use web mode instead of vue-mode
     )
    #+END_SRC
 
+** Search Engine
+   #+BEGIN_SRC emacs-lisp
+(use-package engine-mode
+:ensure t
+:config
+    (defengine duckduckgo
+    "https://duckduckgo.com/?q=%s"
+    :keybinding "d")
+)
+   #+END_SRC
 * Custom definitions
   Override keys with custom bindings
   #+BEGIN_SRC emacs-lisp
