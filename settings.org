@@ -49,16 +49,16 @@
     :ensure t)
     (load-theme 'doom-vibrant t)
 
-    (use-package autumn-light-theme
-    :ensure t)
-
-    (use-package theme-changer
-    :ensure t
-    :config
-        (setq calendar-latitude 56.94)
-        (setq calendar-longitude 24.10)
-        (change-theme 'autumn-light 'doom-vibrant)
-    )
+;    (use-package autumn-light-theme
+;    :ensure t)
+;
+;    (use-package theme-changer
+;    :ensure t
+;    :config
+;        (setq calendar-latitude 56.94)
+;        (setq calendar-longitude 24.10)
+;        (change-theme 'autumn-light 'doom-vibrant)
+;    )
    #+END_SRC
 ** Fonts
    Set fonts, should download if not in system
@@ -240,10 +240,10 @@ Use web mode instead of vue-mode
         '(git-gutter:deleted-sign "|"))
 
         (set-face-foreground 'git-gutter:added "#6fc954")
-        (set-face-background 'git-gutter:added "#6fc954")
-        (set-face-background 'git-gutter:deleted "#f6546a")
+;        (set-face-background 'git-gutter:added "#6fc954")
+;        (set-face-background 'git-gutter:deleted "#f6546a")
         (set-face-foreground 'git-gutter:deleted "#f6546a")
-        (set-face-background 'git-gutter:modified "#fef65b")
+;        (set-face-background 'git-gutter:modified "#fef65b")
         (set-face-foreground 'git-gutter:modified "#fef65b")
     )
    #+END_SRC
@@ -612,13 +612,13 @@ Use web mode instead of vue-mode
 ** OS integration
    Syste monitor
    #+BEGIN_SRC emacs-lisp
-    (use-package symon
-    :ensure t
-    :config
-        (symon-mode 1)
-        (setq symon-sparkline-type 'boxed)
-        (setq symon-sparkline-width '200)
-    )
+;    (use-package symon
+;    :ensure t
+;    :config
+;        (symon-mode 1)
+;        (setq symon-sparkline-type 'boxed)
+;        (setq symon-sparkline-width '200)
+;    )
    #+END_SRC
 
 * Custom definitions
